@@ -1,0 +1,8 @@
+{% from "components/ui.html" import nt_pagination %}
+{% set extra = [] %}
+{% if username_filter is defined and username_filter %}{% set _ = extra.append('username=' ~ username_filter) %}{% endif %}
+{% if email_filter is defined and email_filter %}{% set _ = extra.append('email=' ~ email_filter) %}{% endif %}
+{% if name_filter is defined and name_filter %}{% set _ = extra.append('name=' ~ name_filter) %}{% endif %}
+{% if code_filter is defined and code_filter %}{% set _ = extra.append('code=' ~ code_filter) %}{% endif %}
+{% if type_filter is defined and type_filter %}{% set _ = extra.append('type=' ~ type_filter) %}{% endif %}
+{{ nt_pagination(page, page_size, total, list_url, extra|join('&')) }}

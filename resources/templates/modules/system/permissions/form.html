@@ -1,0 +1,52 @@
+{% extends "layouts/admin.html" %}
+
+{% block content %}
+<form class="form-card" method="post" action="{{ form_action }}">
+    {% if error %}
+    <div class="alert alert-error">{{ error }}</div>
+    {% endif %}
+    <label>
+        <span>权限名称</span>
+        <input name="name" required value="{{ perm_obj.name if perm_obj else '' }}">
+    </label>
+    <label>
+        <span>权限编码</span>
+        <input name="code" required value="{{ perm_obj.code if perm_obj else '' }}">
+    </label>
+    <label>
+        <span>类型</span>
+        <select name="type" required>
+            {% for t in permission_types %}
+            <option value="{{ t }}" {% if perm_obj and perm_obj.type == t %}selected{% endif %}>{{ t }}</option>
+            {% endfor %}
+        </select>
+    </label>
+    <label>
+        <span>路径 / 路由</span>
+        <input name="path" value="{{ perm_obj.path if perm_obj and perm_obj.path else '' }}" placeholder="/api/... 或页面路径">
+    </label>
+    <label>
+        <span>父级权限</span>
+        <select name="parent_id">
+            <option value="">无</option>
+            {% for opt in parent_options %}
+            {% if not perm_obj or opt.id != perm_obj.id %}
+            <option value="{{ opt.id }}" {% if perm_obj and perm_obj.parent_id == opt.id %}selected{% endif %}>{{ opt.name }} ({{ opt.code }})</option>
+            {% endif %}
+            {% endfor %}
+        </select>
+    </label>
+    <label>
+        <span>排序</span>
+        <input type="number" name="sort_order" value="{{ perm_obj.sort_order if perm_obj else 0 }}">
+    </label>
+    <label>
+        <span>说明</span>
+        <textarea name="description" rows="3">{{ perm_obj.description if perm_obj and perm_obj.description else '' }}</textarea>
+    </label>
+    <div class="form-actions">
+        <button type="submit" class="btn btn-primary">保存</button>
+        <a class="btn" href="{{ web_admin_prefix }}/system/permissions">返回列表</a>
+    </div>
+</form>
+{% endblock %}

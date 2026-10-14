@@ -1,0 +1,101 @@
+{% extends "layouts/admin.html" %}
+{% from "components/ui.html" import nt_table, nt_empty_row, nt_pagination, nt_modal %}
+{% block content %}
+<section class="page-card">
+    <h2 class="page-card__title">用户列表</h2>
+    <div class="page-toolbar">
+        <form class="toolbar" method="get" action="{{ list_url }}">
+            <input type="search" name="username" value="{{ username_filter }}" placeholder="用户名">
+            <input type="search" name="email" value="{{ email_filter }}" placeholder="邮箱">
+            <button type="submit" class="btn">查询</button>
+            <button type="button"
+                    class="btn btn-primary"
+                    data-nt-modal-open="userFormModal"
+                    data-nt-modal-title="新建用户"
+                    data-nt-form="userForm"
+                    data-nt-action="{{ list_url }}/create"
+                    data-nt-reset
+                    data-nt-required="password"
+                    data-nt-fill='{"is_active": true}'>
+                新建用户
+            </button>
+        </form>
+    </div>
+
+    {% call nt_table([
+        {"label": "ID", "width": "72px"},
+        {"label": "用户名"},
+        {"label": "邮箱"},
+        {"label": "状态", "width": "90px"},
+        {"label": "操作", "width": "180px"},
+    ]) %}
+        {% for u in users %}
+        <tr>
+            <td>{{ u.id }}</td>
+            <td>{{ u.username }}</td>
+            <td>{{ u.email }}</td>
+            <td>{% if u.is_active %}<span class="tag tag-ok">启用</span>{% else %}<span class="tag tag-muted">禁用</span>{% endif %}</td>
+            <td class="actions-cell">
+                <button type="button"
+                        class="btn btn-sm"
+                        data-nt-modal-open="userFormModal"
+                        data-nt-modal-title="编辑用户"
+                        data-nt-form="userForm"
+                        data-nt-action="{{ list_url }}/{{ u.id }}/edit"
+                        data-nt-optional="password"
+                        data-nt-fill='{{ {"username": u.username, "email": u.email, "password": "", "is_active": u.is_active}|tojson }}'>
+                    编辑
+                </button>
+                {% if current_user.is_superadmin %}
+                <button type="button"
+                        class="btn btn-sm btn-danger"
+                        data-nt-modal-open="userDeleteModal"
+                        data-nt-modal-title="删除用户"
+                        data-nt-form="userDeleteForm"
+                        data-nt-action="{{ list_url }}/{{ u.id }}/delete"
+                        data-nt-confirm-text="确定删除用户「{{ u.username }}」？删除后不可恢复。">
+                    删除
+                </button>
+                {% endif %}
+            </td>
+        </tr>
+        {% else %}
+        {{ nt_empty_row(5) }}
+        {% endfor %}
+    {% endcall %}
+
+    {% set extra = [] %}
+    {% if username_filter %}{% set _ = extra.append('username=' ~ username_filter) %}{% endif %}
+    {% if email_filter %}{% set _ = extra.append('email=' ~ email_filter) %}{% endif %}
+    {{ nt_pagination(page, page_size, total, list_url, extra|join('&')) }}
+
+
+</section>
+
+{% call nt_modal('userFormModal', '新建用户', form_id='userForm', ok_text='保存') %}
+<form id="userForm" class="nt-form" method="post" action="{{ list_url }}/create">
+    <label>
+        <span class="nt-form__label">用户名</span>
+        <input type="text" name="username" required autocomplete="off" placeholder="请输入用户名">
+    </label>
+    <label>
+        <span class="nt-form__label">邮箱</span>
+        <input type="email" name="email" required autocomplete="off" placeholder="请输入邮箱">
+    </label>
+    <label>
+        <span class="nt-form__label">密码</span>
+        <input type="password" name="password" autocomplete="new-password" placeholder="请输入密码">
+        <span class="nt-form__hint">新建时必填；编辑时留空表示不修改原密码</span>
+    </label>
+    <label class="checkbox">
+        <input type="checkbox" name="is_active" checked>
+        启用账号
+    </label>
+</form>
+{% endcall %}
+
+{% call nt_modal('userDeleteModal', '删除用户', size='sm', form_id='userDeleteForm', ok_text='删除') %}
+<p class="nt-confirm-text" data-nt-confirm-message>确定删除该用户？</p>
+<form id="userDeleteForm" method="post" action=""></form>
+{% endcall %}
+{% endblock %}

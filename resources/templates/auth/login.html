@@ -1,0 +1,68 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}登录{% endblock %}
+{% block body_class %}page-login{% endblock %}
+
+{% block head_extra %}
+<link rel="stylesheet" href="{{ url_for('static', path='css/auth.css') }}">
+{% endblock %}
+
+{% block body %}
+<div class="login-page-root">
+    <div class="login-auth-split">
+        <div class="login-auth-split__col login-auth-split__col--illustration">
+            <div class="login-left-view">
+                <div class="login-left-view__hero">
+                    <div class="login-left-view__hero-ring">
+                        <img src="{{ url_for('static', path=static_logo) }}" alt="{{ app_name }}" class="login-left-view__hero-logo">
+                    </div>
+                </div>
+                <div class="login-left-view__desc">
+                    <h2>{{ login_product_title }}</h2>
+                    <!-- <p>{{ app_description }}</p> -->
+                    <p class="login-left-view__desc-extra">Ntesterc_web 采用前后端一体的设计，为不擅长前端开发的开发者提供一站式开发平台框架 · 权限管理 · 业务插件扩展</p>
+                </div>
+                <div class="login-left-view__decor login-left-view__decor--circle"></div>
+                <div class="login-left-view__decor login-left-view__decor--square"></div>
+                <div class="login-left-view__decor login-left-view__decor--dot"></div>
+            </div>
+        </div>
+        <div class="login-auth-split__col login-auth-split__col--form">
+            <div class="login-page-panel">
+                <div class="login-page-panel__main">
+                    <div class="auth-right-wrap">
+                        <div class="form-intro">
+                            <div class="header">
+                                <div class="logo">
+                                    <img src="{{ url_for('static', path=static_logo) }}" alt="{{ app_name }}">
+                                </div>
+                                <div class="title">欢迎使用Ntesterc！</div>
+                            </div>
+                        </div>
+                        <div class="login-main">
+                            {% if error %}
+                            <div class="alert alert-error" role="alert">{{ error }}</div>
+                            {% endif %}
+                            <form class="login-form" method="post" action="{{ web_login_path }}">
+                                <label class="login-field">
+                                    <span class="login-field__icon login-field__icon--user" aria-hidden="true"></span>
+                                    <input type="text" name="username" placeholder="请输入用户名" autocomplete="username" required>
+                                </label>
+                                <label class="login-field">
+                                    <span class="login-field__icon login-field__icon--lock" aria-hidden="true"></span>
+                                    <input type="password" name="password" placeholder="请输入密码" autocomplete="current-password" required>
+                                </label>
+                                <button type="submit" class="login-form-button">登录</button>
+                            </form>
+                            <p class="login-hint">默认账号：admin / admin123</p>
+                        </div>
+                    </div>
+                </div>
+                <footer class="login-page-footer">
+                    <div class="footer-copyright">{{ app_name }} · 版权所有 Ntesterc</div>
+                </footer>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

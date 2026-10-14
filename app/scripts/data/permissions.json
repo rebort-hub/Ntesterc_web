@@ -1,0 +1,58 @@
+[
+  {
+    "name": "用户管理",
+    "code": "user.manage",
+    "description": "用户增删改查",
+    "type": "api",
+    "path": "/api/v1/system/users",
+    "sort_order": 10
+  },
+  {
+    "name": "重置密码",
+    "code": "user.reset-password",
+    "description": "重置用户密码",
+    "type": "api",
+    "path": "/api/v1/system/users/*/reset-password",
+    "sort_order": 11
+  },
+  {
+    "name": "菜单-用户管理",
+    "code": "system.menu.users",
+    "description": "系统管理-用户页面",
+    "type": "menu",
+    "path": "/admin/system/users",
+    "sort_order": 1
+  },
+  {
+    "name": "菜单-角色管理",
+    "code": "system.menu.roles",
+    "description": "系统管理-角色页面",
+    "type": "menu",
+    "path": "/admin/system/roles",
+    "sort_order": 2
+  },
+  {
+    "name": "菜单-权限管理",
+    "code": "system.menu.permissions",
+    "description": "系统管理-权限页面",
+    "type": "menu",
+    "path": "/admin/system/permissions",
+    "sort_order": 3
+  },
+  {
+    "name": "角色管理API",
+    "code": "role.manage",
+    "description": "角色增删改查",
+    "type": "api",
+    "path": "/api/v1/system/roles",
+    "sort_order": 20
+  },
+  {
+    "name": "权限管理API",
+    "code": "permission.manage",
+    "description": "权限增删改查",
+    "type": "api",
+    "path": "/api/v1/system/permissions",
+    "sort_order": 30
+  }
+]

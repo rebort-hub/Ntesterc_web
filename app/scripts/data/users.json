@@ -1,0 +1,9 @@
+[
+  {
+    "username": "admin",
+    "email": "admin@ntesterc.local",
+    "password": "admin123",
+    "is_active": true,
+    "is_superadmin": true
+  }
+]

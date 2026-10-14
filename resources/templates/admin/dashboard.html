@@ -1,0 +1,75 @@
+{% extends "layouts/admin.html" %}
+
+{% block content %}
+<div class="dashboard-stats">
+    <article class="stat-card">
+        <div class="stat-card__label">总销售额</div>
+        <div class="stat-card__value">¥ 126,560</div>
+        <div class="stat-card__footer">
+            周同比 <span class="stat-trend-up">12%</span>
+            日同比 <span class="stat-trend-down">11%</span>
+            <div style="margin-top:8px">日销售额 ¥12,423</div>
+        </div>
+    </article>
+    <article class="stat-card">
+        <div class="stat-card__label">访问量</div>
+        <div class="stat-card__value">8,846</div>
+        <div class="stat-mini-chart" aria-hidden="true">
+            <span style="height:35%"></span><span style="height:55%"></span><span style="height:40%"></span>
+            <span style="height:70%"></span><span style="height:50%"></span><span style="height:80%"></span>
+            <span style="height:45%"></span><span style="height:60%"></span><span style="height:75%"></span>
+        </div>
+    </article>
+    <article class="stat-card">
+        <div class="stat-card__label">支付笔数</div>
+        <div class="stat-card__value">6,560</div>
+        <div class="stat-mini-chart" aria-hidden="true">
+            <span style="height:30%"></span><span style="height:45%"></span><span style="height:38%"></span>
+            <span style="height:52%"></span><span style="height:48%"></span><span style="height:62%"></span>
+            <span style="height:40%"></span><span style="height:55%"></span><span style="height:50%"></span>
+        </div>
+        <div class="stat-card__footer">转化率 60%</div>
+    </article>
+    <article class="stat-card">
+        <div class="stat-card__label">运营活动效果</div>
+        <div class="stat-card__value">78%</div>
+        <div class="stat-progress"><div class="stat-progress__bar"></div></div>
+        <div class="stat-card__footer">
+            周同比 <span class="stat-trend-up">12%</span>
+            日同比 <span class="stat-trend-down">11%</span>
+        </div>
+    </article>
+</div>
+
+<section class="dashboard-panel">
+    <div class="dashboard-tabs" role="tablist">
+        <button type="button" class="dashboard-tab is-active" data-dashboard-tab="sales">销售额</button>
+        <button type="button" class="dashboard-tab" data-dashboard-tab="visits">访问量</button>
+    </div>
+    <div class="dashboard-panel__body">
+        <div class="dashboard-chart" id="dashboard-chart-sales">
+            <div class="dashboard-bars">
+                {% for m in range(1, 13) %}
+                <div class="dashboard-bars__item">
+                    <div class="dashboard-bars__bar" style="height: {{ [42,55,38,72,48,90,65,78,52,88,70,95][m-1] }}%"></div>
+                    <span class="dashboard-bars__label">{{ m }}月</span>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        <aside class="dashboard-rank">
+            <h3 class="dashboard-rank__title">门店销售额排名</h3>
+            <ol>
+                <li><span><span class="rank-badge rank-badge--top">1</span><span class="rank-name">工专路 0 号店</span></span><span class="rank-value">323,234</span></li>
+                <li><span><span class="rank-badge rank-badge--top">2</span><span class="rank-name">工专路 1 号店</span></span><span class="rank-value">298,112</span></li>
+                <li><span><span class="rank-badge rank-badge--top">3</span><span class="rank-name">工专路 2 号店</span></span><span class="rank-value">276,890</span></li>
+                <li><span><span class="rank-badge">4</span><span class="rank-name">工专路 3 号店</span></span><span class="rank-value">245,670</span></li>
+                <li><span><span class="rank-badge">5</span><span class="rank-name">工专路 4 号店</span></span><span class="rank-value">210,432</span></li>
+                <li><span><span class="rank-badge">6</span><span class="rank-name">工专路 5 号店</span></span><span class="rank-value">198,221</span></li>
+                <li><span><span class="rank-badge">7</span><span class="rank-name">工专路 6 号店</span></span><span class="rank-value">176,540</span></li>
+            </ol>
+        </aside>
+    </div>
+</section>
+<script src="{{ url_for('static', path='js/dashboard.js') }}" defer></script>
+{% endblock %}

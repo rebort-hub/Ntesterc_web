@@ -1,0 +1,98 @@
+{% extends "layouts/admin.html" %}
+{% from "components/ui.html" import nt_table, nt_empty_row, nt_pagination, nt_modal %}
+
+{% block content %}
+<section class="page-card">
+    <h2 class="page-card__title">角色列表</h2>
+    <div class="page-toolbar">
+        <form class="toolbar" method="get" action="{{ list_url }}">
+            <input type="search" name="name" value="{{ name_filter }}" placeholder="角色名称">
+            <input type="search" name="code" value="{{ code_filter }}" placeholder="角色编码">
+            <button type="submit" class="btn">查询</button>
+            <button type="button"
+                    class="btn btn-primary"
+                    data-nt-modal-open="roleFormModal"
+                    data-nt-modal-title="新建角色"
+                    data-nt-form="roleForm"
+                    data-nt-action="{{ list_url }}/create"
+                    data-nt-reset
+                    data-nt-fill='{"name":"","code":"","description":""}'>
+                新建角色
+            </button>
+        </form>
+    </div>
+
+    {% call nt_table([
+        {"label": "ID", "width": "72px"},
+        {"label": "名称"},
+        {"label": "编码"},
+        {"label": "说明"},
+        {"label": "系统内置", "width": "100px"},
+        {"label": "操作", "width": "180px"},
+    ]) %}
+        {% for r in roles %}
+        <tr>
+            <td>{{ r.id }}</td>
+            <td>{{ r.name }}</td>
+            <td><code>{{ r.code }}</code></td>
+            <td>{{ r.description or '—' }}</td>
+            <td>{% if r.is_system %}是{% else %}否{% endif %}</td>
+            <td class="actions-cell">
+                <button type="button"
+                        class="btn btn-sm"
+                        data-nt-modal-open="roleFormModal"
+                        data-nt-modal-title="编辑角色"
+                        data-nt-form="roleForm"
+                        data-nt-action="{{ list_url }}/{{ r.id }}/edit"
+                        data-nt-fill='{{ {"name": r.name, "code": r.code, "description": r.description or ""}|tojson }}'>
+                    编辑
+                </button>
+                {% if not r.is_system %}
+                <button type="button"
+                        class="btn btn-sm btn-danger"
+                        data-nt-modal-open="roleDeleteModal"
+                        data-nt-modal-title="删除角色"
+                        data-nt-form="roleDeleteForm"
+                        data-nt-action="{{ list_url }}/{{ r.id }}/delete"
+                        data-nt-confirm-text="确定删除角色「{{ r.name }}」？删除后不可恢复。">
+                    删除
+                </button>
+                {% endif %}
+            </td>
+        </tr>
+        {% else %}
+        {{ nt_empty_row(6) }}
+        {% endfor %}
+    {% endcall %}
+
+    {% set extra = [] %}
+    {% if name_filter %}{% set _ = extra.append('name=' ~ name_filter) %}{% endif %}
+    {% if code_filter %}{% set _ = extra.append('code=' ~ code_filter) %}{% endif %}
+    {{ nt_pagination(page, page_size, total, list_url, extra|join('&')) }}
+
+ 
+</section>
+
+{% call nt_modal('roleFormModal', '新建角色', form_id='roleForm', ok_text='保存') %}
+<form id="roleForm" class="nt-form" method="post" action="{{ list_url }}/create">
+    <label>
+        <span class="nt-form__label">角色名称</span>
+        <input type="text" name="name" required placeholder="请输入角色名称">
+    </label>
+    <label>
+        <span class="nt-form__label">角色编码</span>
+        <input type="text" name="code" required placeholder="请输入角色编码，如 admin">
+        <span class="nt-form__hint">编码创建后请谨慎修改，业务权限可能依赖该值</span>
+    </label>
+    <label>
+        <span class="nt-form__label">说明</span>
+        <textarea name="description" rows="3" placeholder="选填，描述该角色用途"></textarea>
+    </label>
+</form>
+{% endcall %}
+
+{% call nt_modal('roleDeleteModal', '删除角色', size='sm', form_id='roleDeleteForm', ok_text='删除') %}
+<p class="nt-confirm-text" data-nt-confirm-message>确定删除该角色？</p>
+<form id="roleDeleteForm" method="post" action=""></form>
+{% endcall %}
+{% endblock %}

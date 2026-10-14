@@ -1,0 +1,53 @@
+{% extends "layouts/base.html" %}
+{% block title %}首页{% endblock %}
+{% block body %}
+<header class="site-header">
+    <div class="container">
+        <strong>{{ app_name }}</strong>
+        <nav>
+            <a href="{{ web_login_path }}">登录</a>
+            <a href="/docs">API 文档</a>
+        </nav>
+    </div>
+</header>
+<main class="site-hero container">
+    <h1>{{ app_name }}</h1>
+    <!-- <p class="lead">{{ app_description }}</p> -->
+    <p>本系统采用<strong>前后端不分离</strong>架构：页面由服务端 Jinja 渲染，业务数据通过同进程 Service 层加载，REST API 仍可供对接与扩展。</p>
+    <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div class="features">
+            <div class="feature-item">
+                <h3>🚀 高性能</h3>
+                <p>基于 FastAPI 构建，提供极致的性能体验</p>
+            </div>
+            <div class="feature-item">
+                <h3>🔒 安全可靠</h3>
+                <p>内置 JWT 认证，保障 API 安全</p>
+            </div>
+            <div class="feature-item">
+                <h3>📚 文档完善</h3>
+                <p>自动生成 API 文档，开发更轻松</p>
+            </div>
+        </div>
+
+        <div class="links">
+            <a href="/docs" class="btn">API 文档</a>
+            <a href="/redoc" class="btn">ReDoc 文档</a>
+        </div>
+    </div>
+    <script src="{{ url_for('static', path='js/main.js') }}"></script>
+</body>
+    <div class="actions">
+        <a class="btn btn-primary" href="{{ web_login_path }}">进入后台</a>
+        <a class="btn" href="/docs">查看 API</a>
+    </div>
+</body>
+</main>
+{% endblock %}

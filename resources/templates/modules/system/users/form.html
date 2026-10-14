@@ -1,0 +1,29 @@
+{% extends "layouts/admin.html" %}
+
+{% block content %}
+<form class="form-card" method="post" action="{{ form_action }}">
+    {% if error %}
+    <div class="alert alert-error">{{ error }}</div>
+    {% endif %}
+    <label>
+        <span>用户名</span>
+        <input name="username" required value="{{ user_obj.username if user_obj else (form_username | default('')) }}">
+    </label>
+    <label>
+        <span>邮箱</span>
+        <input type="email" name="email" required value="{{ user_obj.email if user_obj else (form_email | default('')) }}">
+    </label>
+    <label>
+        <span>密码{% if user_obj %}（留空不修改）{% endif %}</span>
+        <input type="password" name="password" {% if not user_obj %}required{% endif %}>
+    </label>
+    <label class="checkbox">
+        <input type="checkbox" name="is_active" {% if user_obj is none and form_is_active is not defined %}checked{% elif user_obj and user_obj.is_active %}checked{% elif form_is_active %}checked{% endif %}>
+        启用账号
+    </label>
+    <div class="form-actions">
+        <button type="submit" class="btn btn-primary">保存</button>
+        <a class="btn" href="{{ web_admin_prefix }}/system/users">返回列表</a>
+    </div>
+</form>
+{% endblock %}

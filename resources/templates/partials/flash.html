@@ -1,0 +1,18 @@
+{% if flash_ok or flash_err %}
+<div class="nt-toast-host" id="nt-toast-host" aria-live="polite">
+    {% if flash_ok %}
+    <div class="nt-toast nt-toast--success" role="status" data-nt-toast>
+        <span class="nt-toast__icon" aria-hidden="true">✓</span>
+        <span class="nt-toast__text">{{ flash_ok }}</span>
+        <button type="button" class="nt-toast__close" data-nt-toast-close aria-label="关闭">×</button>
+    </div>
+    {% endif %}
+    {% if flash_err %}
+    <div class="nt-toast nt-toast--error" role="alert" data-nt-toast>
+        <span class="nt-toast__icon" aria-hidden="true">!</span>
+        <span class="nt-toast__text">{{ flash_err }}</span>
+        <button type="button" class="nt-toast__close" data-nt-toast-close aria-label="关闭">×</button>
+    </div>
+    {% endif %}
+</div>
+{% endif %}

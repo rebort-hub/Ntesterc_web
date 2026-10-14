@@ -1,0 +1,130 @@
+{% extends "layouts/admin.html" %}
+{% from "components/ui.html" import nt_table, nt_empty_row, nt_pagination, nt_modal %}
+
+{% block content %}
+<section class="page-card">
+    <h2 class="page-card__title">权限列表</h2>
+    <div class="page-toolbar">
+        <form class="toolbar" method="get" action="{{ list_url }}">
+            <input type="search" name="name" value="{{ name_filter }}" placeholder="权限名称">
+            <input type="search" name="code" value="{{ code_filter }}" placeholder="权限编码">
+            <select name="type">
+                <option value="">全部类型</option>
+                {% for t in permission_types %}
+                <option value="{{ t }}" {% if type_filter == t %}selected{% endif %}>{{ t }}</option>
+                {% endfor %}
+            </select>
+            <button type="submit" class="btn">查询</button>
+            <button type="button"
+                    class="btn btn-primary"
+                    data-nt-modal-open="permFormModal"
+                    data-nt-modal-title="新建权限"
+                    data-nt-form="permForm"
+                    data-nt-action="{{ list_url }}/create"
+                    data-nt-reset
+                    data-nt-fill='{"name":"","code":"","type":"menu","path":"","parent_id":"","sort_order":"0","description":""}'>
+                新建权限
+            </button>
+        </form>
+    </div>
+
+    {% call nt_table([
+        {"label": "ID", "width": "72px"},
+        {"label": "名称"},
+        {"label": "编码"},
+        {"label": "类型", "width": "90px"},
+        {"label": "路径"},
+        {"label": "排序", "width": "72px"},
+        {"label": "操作", "width": "180px"},
+    ]) %}
+        {% for p in permissions %}
+        <tr>
+            <td>{{ p.id }}</td>
+            <td>{{ p.name }}</td>
+            <td><code>{{ p.code }}</code></td>
+            <td>{{ p.type }}</td>
+            <td>{{ p.path or '—' }}</td>
+            <td>{{ p.sort_order }}</td>
+            <td class="actions-cell">
+                <button type="button"
+                        class="btn btn-sm"
+                        data-nt-modal-open="permFormModal"
+                        data-nt-modal-title="编辑权限"
+                        data-nt-form="permForm"
+                        data-nt-action="{{ list_url }}/{{ p.id }}/edit"
+                        data-nt-fill='{{ {"name": p.name, "code": p.code, "type": p.type, "path": p.path or "", "parent_id": p.parent_id or "", "sort_order": p.sort_order, "description": p.description or ""}|tojson }}'>
+                    编辑
+                </button>
+                <button type="button"
+                        class="btn btn-sm btn-danger"
+                        data-nt-modal-open="permDeleteModal"
+                        data-nt-modal-title="删除权限"
+                        data-nt-form="permDeleteForm"
+                        data-nt-action="{{ list_url }}/{{ p.id }}/delete"
+                        data-nt-confirm-text="确定删除权限「{{ p.name }}」？删除后不可恢复。">
+                    删除
+                </button>
+            </td>
+        </tr>
+        {% else %}
+        {{ nt_empty_row(7) }}
+        {% endfor %}
+    {% endcall %}
+
+    {% set extra = [] %}
+    {% if name_filter %}{% set _ = extra.append('name=' ~ name_filter) %}{% endif %}
+    {% if code_filter %}{% set _ = extra.append('code=' ~ code_filter) %}{% endif %}
+    {% if type_filter %}{% set _ = extra.append('type=' ~ type_filter) %}{% endif %}
+    {{ nt_pagination(page, page_size, total, list_url, extra|join('&')) }}
+</section>
+
+{% call nt_modal('permFormModal', '新建权限', form_id='permForm', ok_text='保存') %}
+<form id="permForm" class="nt-form" method="post" action="{{ list_url }}/create">
+    <label>
+        <span class="nt-form__label">权限名称</span>
+        <input type="text" name="name" required placeholder="请输入权限名称">
+    </label>
+    <label>
+        <span class="nt-form__label">权限编码</span>
+        <input type="text" name="code" required placeholder="如 system.menu.users">
+        <span class="nt-form__hint">建议使用点号分层，例如 module.action</span>
+    </label>
+    <label>
+        <span class="nt-form__label">类型</span>
+        <select name="type" required>
+            {% for t in permission_types %}
+            <option value="{{ t }}">{{ t }}</option>
+            {% endfor %}
+        </select>
+        <span class="nt-form__hint">menu=菜单，button=按钮，api=接口</span>
+    </label>
+    <label>
+        <span class="nt-form__label">路径 / 路由</span>
+        <input type="text" name="path" placeholder="如 /admin/system/users 或 /api/v1/...">
+    </label>
+    <label>
+        <span class="nt-form__label">父级权限</span>
+        <select name="parent_id">
+            <option value="">无（顶级）</option>
+            {% for opt in parent_options %}
+            <option value="{{ opt.id }}">{{ opt.name }} ({{ opt.code }})</option>
+            {% endfor %}
+        </select>
+    </label>
+    <label>
+        <span class="nt-form__label">排序</span>
+        <input type="number" name="sort_order" value="0">
+        <span class="nt-form__hint">数值越小越靠前</span>
+    </label>
+    <label>
+        <span class="nt-form__label">说明</span>
+        <textarea name="description" rows="3" placeholder="选填，描述该权限用途"></textarea>
+    </label>
+</form>
+{% endcall %}
+
+{% call nt_modal('permDeleteModal', '删除权限', size='sm', form_id='permDeleteForm', ok_text='删除') %}
+<p class="nt-confirm-text" data-nt-confirm-message>确定删除该权限？</p>
+<form id="permDeleteForm" method="post" action=""></form>
+{% endcall %}
+{% endblock %}

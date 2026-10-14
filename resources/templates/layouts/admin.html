@@ -1,0 +1,77 @@
+{% extends "layouts/base.html" %}
+
+{% block body_class %}layout-admin{% endblock %}
+
+{% block head_extra %}
+<link rel="stylesheet" href="{{ url_for('static', path='css/admin.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', path='css/components.css') }}">
+{% block admin_page_extra_head %}{% endblock %}
+{% if active_module == 'system' %}
+<link rel="stylesheet" href="{{ url_for('static', path='modules/system/css/system.css') }}">
+{% endif %}
+{% if active_nav == 'dashboard' %}
+<link rel="stylesheet" href="{{ url_for('static', path='css/dashboard.css') }}">
+{% endif %}
+{% endblock %}
+
+{% block body %}
+<div class="admin-shell">
+    <aside class="admin-sidebar" id="admin-sidebar">
+        <div class="sidebar-brand">
+            <a href="{{ web_admin_prefix }}" class="sidebar-brand__link">
+                <img class="sidebar-brand__logo" src="{{ url_for('static', path=static_logo) }}" alt="{{ app_name }}">
+                <span class="sidebar-brand__title">{{ app_name }}</span>
+            </a>
+        </div>
+        <nav class="sidebar-menu" aria-label="主导航">
+            <a href="{{ web_admin_prefix }}"
+               class="menu-item menu-item--root {% if active_nav == 'dashboard' %}is-active{% endif %}">
+                <span class="menu-icon menu-icon--dashboard" aria-hidden="true"></span>
+                <span class="menu-label">控制台</span>
+            </a>
+            {% for group in web_menu_groups %}
+            <div class="menu-group {% if active_module == group.code %}is-open{% endif %}" data-menu-group>
+                <button type="button" class="menu-group__trigger" aria-expanded="{% if active_module == group.code %}true{% else %}false{% endif %}">
+                    <span class="menu-icon menu-icon--{{ group.icon | default('folder') }}" aria-hidden="true"></span>
+                    <span class="menu-label">{{ group.name }}</span>
+                    <span class="menu-group__arrow" aria-hidden="true"></span>
+                </button>
+                <div class="menu-group__panel">
+                    {% for item in group.children %}
+                    <a href="{{ item.path }}"
+                       class="menu-item menu-item--sub {% if active_module == group.code and active_nav == item.code %}is-active{% endif %}">
+                        <span class="menu-icon menu-icon--{{ item.icon | default('dot') }}" aria-hidden="true"></span>
+                        <span class="menu-label">{{ item.name }}</span>
+                    </a>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
+        </nav>
+    </aside>
+    <div class="admin-main">
+        <header class="admin-topbar">
+            <div class="admin-topbar__left">
+                <button type="button" class="sidebar-toggle" id="sidebar-toggle" aria-label="折叠菜单">
+                    <span></span><span></span><span></span>
+                </button>
+                <h1 class="admin-topbar__title">{% block page_title %}{{ title }}{% endblock %}</h1>
+            </div>
+            <div class="admin-topbar__right">
+                <span class="admin-user">{{ current_user.username }}</span>
+                <a class="admin-logout" href="/logout">退出</a>
+            </div>
+        </header>
+        <main class="admin-content">
+            {% include "partials/flash.html" %}
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+</div>
+<script src="{{ url_for('static', path='js/components.js') }}" defer></script>
+<script src="{{ url_for('static', path='js/admin.js') }}" defer></script>
+{% if active_module == 'system' %}
+<script src="{{ url_for('static', path='modules/system/js/system.js') }}" defer></script>
+{% endif %}
+{% block admin_page_scripts %}{% endblock %}
+{% endblock %}

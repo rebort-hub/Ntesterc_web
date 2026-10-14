@@ -1,0 +1,25 @@
+{% extends "layouts/admin.html" %}
+
+{% block content %}
+<form class="form-card" method="post" action="{{ form_action }}">
+    {% if error %}
+    <div class="alert alert-error">{{ error }}</div>
+    {% endif %}
+    <label>
+        <span>角色名称</span>
+        <input name="name" required value="{{ role_obj.name if role_obj else (form_name | default('')) }}">
+    </label>
+    <label>
+        <span>角色编码</span>
+        <input name="code" required value="{{ role_obj.code if role_obj else (form_code | default('')) }}">
+    </label>
+    <label>
+        <span>说明</span>
+        <textarea name="description" rows="3">{{ role_obj.description if role_obj else (form_description | default('')) }}</textarea>
+    </label>
+    <div class="form-actions">
+        <button type="submit" class="btn btn-primary">保存</button>
+        <a class="btn" href="{{ web_admin_prefix }}/system/roles">返回列表</a>
+    </div>
+</form>
+{% endblock %}

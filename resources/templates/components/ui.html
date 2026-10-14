@@ -1,0 +1,119 @@
+{#
+  公共 UI 宏：页面顶部引入一次即可
+  {% from "components/ui.html" import nt_table, nt_pagination, nt_modal, nt_datetime, nt_date_range %}
+#}
+
+{% macro nt_table(columns, zebra=true, empty_text='暂无数据', class_name='') -%}
+<div class="nt-table-wrap">
+    <table class="nt-table {% if zebra %}nt-table--zebra{% endif %} {{ class_name }}">
+        <thead>
+            <tr>
+                {% for col in columns %}
+                <th{% if col.width %} style="width:{{ col.width }}"{% endif %}{% if col.align %} class="is-{{ col.align }}"{% endif %}>
+                    {{ col.label }}
+                </th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {{ caller() }}
+        </tbody>
+    </table>
+</div>
+{%- endmacro %}
+
+
+{% macro nt_empty_row(colspan, text='暂无数据') -%}
+<tr>
+    <td colspan="{{ colspan }}" class="nt-table__empty">{{ text }}</td>
+</tr>
+{%- endmacro %}
+
+
+{# ---------- Pagination ---------- #}
+{% macro nt_pagination(page, page_size, total, base_url, extra_query='') -%}
+{% set total_pages = ((total - 1) // page_size) + 1 if total > 0 else 1 %}
+{% set q = ('&' ~ extra_query) if extra_query else '' %}
+<nav class="nt-pagination" aria-label="分页">
+    <div class="nt-pagination__total">共 <strong>{{ total }}</strong> 条</div>
+    <div class="nt-pagination__pager">
+        {% if page > 1 %}
+        <a class="nt-page-btn" href="{{ base_url }}?page={{ page - 1 }}&page_size={{ page_size }}{{ q }}">上一页</a>
+        {% else %}
+        <span class="nt-page-btn is-disabled">上一页</span>
+        {% endif %}
+
+        {% set start = page - 2 if page - 2 > 1 else 1 %}
+        {% set end = page + 2 if page + 2 < total_pages else total_pages %}
+        {% if start > 1 %}
+        <a class="nt-page-num" href="{{ base_url }}?page=1&page_size={{ page_size }}{{ q }}">1</a>
+        {% if start > 2 %}<span class="nt-page-ellipsis">…</span>{% endif %}
+        {% endif %}
+        {% for p in range(start, end + 1) %}
+        <a class="nt-page-num {% if p == page %}is-active{% endif %}"
+           href="{{ base_url }}?page={{ p }}&page_size={{ page_size }}{{ q }}">{{ p }}</a>
+        {% endfor %}
+        {% if end < total_pages %}
+        {% if end < total_pages - 1 %}<span class="nt-page-ellipsis">…</span>{% endif %}
+        <a class="nt-page-num" href="{{ base_url }}?page={{ total_pages }}&page_size={{ page_size }}{{ q }}">{{ total_pages }}</a>
+        {% endif %}
+
+        {% if page < total_pages %}
+        <a class="nt-page-btn" href="{{ base_url }}?page={{ page + 1 }}&page_size={{ page_size }}{{ q }}">下一页</a>
+        {% else %}
+        <span class="nt-page-btn is-disabled">下一页</span>
+        {% endif %}
+    </div>
+</nav>
+{%- endmacro %}
+
+
+{# ---------- Modal ---------- #}
+{% macro nt_modal(id, title='提示', size='md', footer=true, form_id='', ok_text='确定', cancel_text='取消') -%}
+<div class="nt-modal" id="{{ id }}" aria-hidden="true" role="dialog" aria-modal="true"
+     data-nt-default-title="{{ title }}">
+    <div class="nt-modal__mask" data-nt-modal-close></div>
+    <div class="nt-modal__panel nt-modal__panel--{{ size }}">
+        <header class="nt-modal__header">
+            <h3 class="nt-modal__title" data-nt-modal-title>{{ title }}</h3>
+            <button type="button" class="nt-modal__close" data-nt-modal-close aria-label="关闭">×</button>
+        </header>
+        <div class="nt-modal__body">
+            {{ caller() }}
+        </div>
+        {% if footer %}
+        <footer class="nt-modal__footer">
+            <button type="button" class="btn" data-nt-modal-close>{{ cancel_text }}</button>
+            <button type="button"
+                    class="btn btn-primary"
+                    data-nt-modal-ok
+                    {% if form_id %}data-nt-modal-submit="{{ form_id }}"{% endif %}>{{ ok_text }}</button>
+        </footer>
+        {% endif %}
+    </div>
+</div>
+{%- endmacro %}
+
+
+{# ---------- DateTime ---------- #}
+{% macro nt_datetime(name, value='', label='', placeholder='', required=false, type='datetime-local') -%}
+<label class="nt-datetime">
+    {% if label %}<span class="nt-datetime__label">{{ label }}</span>{% endif %}
+    <input class="nt-datetime__input"
+           type="{{ type }}"
+           name="{{ name }}"
+           value="{{ value or '' }}"
+           {% if placeholder %}placeholder="{{ placeholder }}"{% endif %}
+           {% if required %}required{% endif %}>
+</label>
+{%- endmacro %}
+
+
+{% macro nt_date_range(start_name='start_at', end_name='end_at', start_value='', end_value='', label='') -%}
+<div class="nt-date-range">
+    {% if label %}<span class="nt-date-range__label">{{ label }}</span>{% endif %}
+    <input class="nt-datetime__input" type="date" name="{{ start_name }}" value="{{ start_value or '' }}">
+    <span class="nt-date-range__sep">至</span>
+    <input class="nt-datetime__input" type="date" name="{{ end_name }}" value="{{ end_value or '' }}">
+</div>
+{%- endmacro %}

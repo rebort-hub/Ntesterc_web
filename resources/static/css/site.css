@@ -1,0 +1,99 @@
+:root {
+    --bg: #f4f6f9;
+    --text: #1a1d21;
+    --muted: #5c6570;
+    --primary: #2563eb;
+    --nt-primary: #1677ff;
+    --border: #e2e8f0;
+    --radius: 8px;
+    /* 优先中文字体，避免 Windows 下回退糊字 */
+    --font: "PingFang SC", "Microsoft YaHei", "Segoe UI", system-ui, -apple-system, sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+}
+
+body {
+    margin: 0;
+    font-family: var(--font);
+    color: var(--text);
+    background: var(--bg);
+    line-height: 1.5;
+    font-size: 14px;
+}
+
+.container {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0 1.25rem;
+}
+
+.site-header {
+    background: #fff;
+    border-bottom: 1px solid var(--border);
+    padding: 0.75rem 0;
+}
+
+.site-header .container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.site-header nav a {
+    margin-left: 1rem;
+    color: var(--primary);
+    text-decoration: none;
+}
+
+.site-hero {
+    padding: 3rem 0 4rem;
+}
+
+.site-hero h1 {
+    margin: 0 0 0.5rem;
+    font-size: 2rem;
+}
+
+.lead {
+    color: var(--muted);
+    font-size: 1.1rem;
+}
+
+.actions {
+    margin-top: 2rem;
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    height: var(--nt-control-height, 32px);
+    padding: 0 15px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: #fff;
+    color: var(--text);
+    text-decoration: none;
+    cursor: pointer;
+    font-size: 14px;
+    line-height: 1;
+    vertical-align: middle;
+}
+
+.btn-primary {
+    background: var(--nt-primary, #1677ff);
+    border-color: var(--nt-primary, #1677ff);
+    color: #fff;
+}
+
+.btn-block { width: 100%; text-align: center; }
