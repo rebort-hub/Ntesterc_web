@@ -10,7 +10,7 @@ Ntesterc Web 是一个使用 Python 和 FastAPI 框架开发的 Web 应用骨架
 
 - **Python**: <3.10+ <3.13
 - **FastAPI**: 高性能异步 Web 框架
-- **Tortoise ORM**: 异步 ORM 数据库操作
+- **alembic ORM**: 异步 ORM 数据库操作
 - **SQLite/MySQL/PostgreSQL**: 数据库支持
 - **JWT**: 双令牌认证系统（访问令牌 + 刷新令牌）
 - **Pydantic**: 数据验证和设置管理
