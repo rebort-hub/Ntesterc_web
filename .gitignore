@@ -5,6 +5,7 @@ __pycache__
 .idea
 .DS_Store
 .git
+.venv
 
 Ntesterc_web/__pycache__
 Ntesterc_web/.vscode
