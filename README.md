@@ -1,4 +1,4 @@
-# Star Web 项目
+# Ntesterc Web 项目
 
 一个基于 FastAPI 框架的 Python Web 应用，提供完整的用户认证和管理功能。
 
@@ -127,7 +127,7 @@ Ntesterc_web/
 
 ## 数据架构设计
 
-Star Web 采用了传统的角色-权限-用户模型设计，实现了基于角色的访问控制 (RBAC) 系统。
+Ntesterc Web 采用了传统的角色-权限-用户模型设计，实现了基于角色的访问控制 (RBAC) 系统。
 
 ### 数据模型关系
 
@@ -212,7 +212,7 @@ class Permission(Model):
 ```ini
 [APP]
 # 应用名称
-APP_NAME = StarWeb
+APP_NAME = Ntesterc
 # 调试模式
 DEBUG = True
 # 密钥
@@ -262,7 +262,7 @@ ALLOW_CREDENTIALS = True
 1. 克隆项目并安装依赖：
 ```bash
 git clone <repository-url>
-cd star_web
+cd Ntesterc_web
 pip install -r requirements.txt
 ```
 
@@ -328,13 +328,13 @@ Authorization: Bearer your_access_token
 
 ## 许可证
 
-本项目采用 MIT 许可证 - 详情请参阅 [LICENSE](LICENSE) 文件。
+本项目采用 apache 许可证 - 详情请参阅 [LICENSE](LICENSE) 文件。
 
 ## 联系方式
 
 项目维护者 - 邮箱地址
 
-Email: starloongyibao@qq.com
+Email: 2697094103@qq.com
 
-项目链接: [star-web](https://gitee.com/chenwm-star/star-web.git)
+
 
