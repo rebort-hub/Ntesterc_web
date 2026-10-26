@@ -1,6 +1,5 @@
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
-
 from app.api.v1.system.permission.model import Permission
 from app.api.v1.system.role.model import Role, role_permission
 from app.api.v1.system.user_role.model import UserRole

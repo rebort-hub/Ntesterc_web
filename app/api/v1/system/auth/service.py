@@ -1,9 +1,7 @@
 from datetime import datetime
 from typing import Annotated, Any, Dict, Optional, Tuple
-
 from fastapi import Depends
 from sqlalchemy.ext.asyncio import AsyncSession
-
 from app.core.database import get_db
 from app.core.exceptions.auth import (
     InvalidCredentialsError,

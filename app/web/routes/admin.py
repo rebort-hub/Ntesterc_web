@@ -1,7 +1,9 @@
 from fastapi import APIRouter, Depends, Request
 from fastapi.responses import HTMLResponse
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.v1.system.user.model import User
+from app.core.database import get_db
 from app.settings.config import WEB_ADMIN_PREFIX
 from app.web.context import admin_page_context
 from app.web.deps import require_web_user
@@ -15,13 +17,15 @@ router = APIRouter(prefix=WEB_ADMIN_PREFIX, tags=["Web Admin"])
 async def admin_dashboard(
     request: Request,
     current_user: User = Depends(require_web_user),
+    db: AsyncSession = Depends(get_db),
 ):
-    ctx = admin_page_context(
+    ctx = await admin_page_context(
         request,
         current_user,
         active_nav="dashboard",
         active_module="",
         title="控制台",
+        db=db,
         system_users_path=system_path("/users"),
     )
     return render(request, "admin/dashboard.html", ctx)

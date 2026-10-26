@@ -1,8 +1,6 @@
 import os
-
 from alembic import command
 from alembic.config import Config
-
 from app.config.path_conf import BASE_DIR, ALEMBIC_VERSION_DIR
 from app.settings.config import SYNC_DATABASE_URL
 

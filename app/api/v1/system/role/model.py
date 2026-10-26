@@ -1,6 +1,5 @@
 from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, Table, Text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-
 from app.core.models.base import Base, ModelBase
 
 role_permission = Table(

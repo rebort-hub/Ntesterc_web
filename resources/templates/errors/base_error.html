@@ -1,0 +1,20 @@
+{% extends "layouts/base.html" %}
+
+{% block body_class %}layout-error{% endblock %}
+
+{% block head_extra %}
+<link rel="stylesheet" href="{{ url_for('static', path='css/error.css') }}">
+{% endblock %}
+
+{% block body %}
+<div class="nt-error">
+    {% block error_illust %}{% endblock %}
+    <div class="nt-error__body">
+        <h1 class="nt-error__code">{% block error_code %}{% endblock %}</h1>
+        <p class="nt-error__msg">{% block error_message %}{% endblock %}</p>
+        <div class="nt-error__actions">
+            <a class="btn btn-primary" href="{{ home_url | default(web_admin_prefix or '/') }}">返回首页</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

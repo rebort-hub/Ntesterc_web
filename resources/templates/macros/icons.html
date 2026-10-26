@@ -1,0 +1,4 @@
+{# 菜单/权限图标：class 为 layui-icon + layui-icon-* #}
+{% macro nt_icon(name, default='layui-icon-circle-dot', extra='') -%}
+<i class="layui-icon {{ name or default }}{% if extra %} {{ extra }}{% endif %}" aria-hidden="true"></i>
+{%- endmacro %}

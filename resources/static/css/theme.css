@@ -1,0 +1,507 @@
+/* 主题抽屉 + 皮肤预览（依赖 --nt-* 令牌） */
+
+.nt-drawer {
+    position: fixed;
+    inset: 0;
+    z-index: 1200;
+    pointer-events: none;
+    visibility: hidden;
+}
+
+.nt-drawer.is-open {
+    pointer-events: auto;
+    visibility: visible;
+}
+
+.nt-drawer__mask {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.35);
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.nt-drawer.is-open .nt-drawer__mask {
+    opacity: 1;
+}
+
+.nt-drawer__panel {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: min(320px, 100vw);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background: var(--nt-surface, #fff);
+    color: var(--nt-text);
+    box-shadow: -6px 0 16px rgba(0, 0, 0, 0.08);
+    transform: translateX(100%);
+    transition: transform 0.22s ease;
+}
+
+.nt-drawer.is-open .nt-drawer__panel {
+    transform: translateX(0);
+}
+
+.nt-drawer__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: var(--nt-topbar-height, 56px);
+    padding: 0 16px;
+    border-bottom: 1px solid var(--nt-border);
+    flex-shrink: 0;
+}
+
+.nt-drawer__title {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.nt-drawer__close {
+    width: 28px;
+    height: 28px;
+    border: none;
+    border-radius: 4px;
+    background: transparent;
+    color: var(--nt-text-secondary);
+    font-size: 20px;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.nt-drawer__close:hover {
+    background: var(--nt-menu-hover);
+    color: var(--nt-text);
+}
+
+.nt-drawer__body {
+    flex: 1;
+    overflow: auto;
+    padding: 16px;
+}
+
+.nt-theme-section {
+    margin-bottom: 20px;
+}
+
+.nt-theme-section__title {
+    margin: 0 0 12px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--nt-text-secondary);
+}
+
+.nt-theme-skins {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.nt-theme-skins--layout {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.nt-theme-skin {
+    width: 68px;
+    padding: 0;
+    border: 2px solid transparent;
+    border-radius: 6px;
+    background: transparent;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+.nt-theme-skins--layout .nt-theme-skin {
+    width: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 4px;
+}
+
+.nt-theme-skin.is-active {
+    border-color: var(--nt-primary);
+}
+
+.nt-theme-skin__label {
+    font-size: 12px;
+    color: var(--nt-text-secondary);
+}
+
+.nt-theme-skin.is-active .nt-theme-skin__label {
+    color: var(--nt-primary);
+}
+
+.nt-theme-skin__preview {
+    display: block;
+    width: 100%;
+    height: 48px;
+    border: 1px solid var(--nt-border);
+    border-radius: 4px;
+    overflow: hidden;
+    background: #f4f5f7;
+}
+
+.nt-theme-skins--layout .nt-theme-skin__preview {
+    width: 100%;
+    height: 52px;
+}
+
+.nt-theme-skin__preview span {
+    display: block;
+    height: 100%;
+    box-sizing: border-box;
+}
+
+/* 垂直：左侧栏 + 顶栏 */
+.nt-theme-skin__preview--layout-vertical {
+    display: flex !important;
+}
+.nt-theme-skin__preview--layout-vertical .side {
+    width: 28%;
+    height: 100%;
+    background: #fff;
+    border-right: 1px solid #eee;
+}
+.nt-theme-skin__preview--layout-vertical .main {
+    flex: 1;
+    height: 100%;
+    background: #f4f5f7;
+}
+.nt-theme-skin__preview--layout-vertical .bar {
+    height: 22%;
+    background: #fff;
+    border-bottom: 1px solid #eee;
+}
+
+/* 水平：仅顶栏 */
+.nt-theme-skin__preview--layout-horizontal {
+    display: flex !important;
+    flex-direction: column;
+}
+.nt-theme-skin__preview--layout-horizontal .bar {
+    height: 26%;
+    background: #fff;
+    border-bottom: 1px solid #eee;
+}
+.nt-theme-skin__preview--layout-horizontal .main {
+    flex: 1;
+    background: #f4f5f7;
+}
+
+/* 混合：顶栏 + 侧栏 */
+.nt-theme-skin__preview--layout-mixed {
+    display: flex !important;
+    flex-direction: column;
+}
+.nt-theme-skin__preview--layout-mixed .bar {
+    height: 22%;
+    background: #fff;
+    border-bottom: 1px solid #eee;
+}
+.nt-theme-skin__preview--layout-mixed .body {
+    flex: 1;
+    display: flex !important;
+    height: auto;
+}
+.nt-theme-skin__preview--layout-mixed .side {
+    width: 28%;
+    height: 100%;
+    background: #fff;
+    border-right: 1px solid #eee;
+}
+.nt-theme-skin__preview--layout-mixed .main {
+    flex: 1;
+    background: #f4f5f7;
+}
+
+/* 双列：窄栏 + 侧栏 + 内容 */
+.nt-theme-skin__preview--layout-columns {
+    display: flex !important;
+}
+.nt-theme-skin__preview--layout-columns .rail {
+    width: 14%;
+    height: 100%;
+    background: #e8e8e8;
+    border-right: 1px solid #ddd;
+}
+.nt-theme-skin__preview--layout-columns .side {
+    width: 22%;
+    height: 100%;
+    background: #fff;
+    border-right: 1px solid #eee;
+}
+.nt-theme-skin__preview--layout-columns .main {
+    flex: 1;
+    height: 100%;
+    background: #f4f5f7;
+}
+.nt-theme-skin__preview--layout-columns .bar {
+    height: 22%;
+    background: #fff;
+    border-bottom: 1px solid #eee;
+}
+
+.nt-theme-colors {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.nt-theme-color {
+    width: 28px;
+    height: 28px;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    position: relative;
+    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.08);
+}
+
+.nt-theme-color.is-active::after {
+    content: "";
+    position: absolute;
+    inset: 6px;
+    border-radius: 50%;
+    border: 2px solid #fff;
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.12);
+}
+
+.nt-theme-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 4px 0;
+}
+
+.nt-theme-row__label {
+    font-size: 14px;
+    color: var(--nt-text);
+}
+
+.nt-switch {
+    position: relative;
+    width: 40px;
+    height: 22px;
+    flex-shrink: 0;
+}
+
+.nt-switch input {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.nt-switch__track {
+    position: absolute;
+    inset: 0;
+    border-radius: 11px;
+    background: rgba(0, 0, 0, 0.25);
+    transition: background 0.2s;
+    cursor: pointer;
+}
+
+.nt-switch__track::after {
+    content: "";
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: #fff;
+    transition: transform 0.2s;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.nt-switch input:checked + .nt-switch__track {
+    background: var(--nt-primary);
+}
+
+.nt-switch input:checked + .nt-switch__track::after {
+    transform: translateX(18px);
+}
+
+body.nt-drawer-open {
+    overflow: hidden;
+}
+
+/* —— 暗色模式 —— */
+html.nt-dark {
+    color-scheme: dark;
+    --bg: #141414;
+    --text: rgba(255, 255, 255, 0.85);
+    --muted: rgba(255, 255, 255, 0.45);
+    --border: rgba(255, 255, 255, 0.12);
+    --nt-bg: #141414;
+    --nt-surface: #1f1f1f;
+    --nt-sider-bg: #1f1f1f;
+    --nt-border: rgba(255, 255, 255, 0.12);
+    --nt-text: rgba(255, 255, 255, 0.85);
+    --nt-text-secondary: rgba(255, 255, 255, 0.45);
+    --nt-menu-hover: rgba(255, 255, 255, 0.08);
+    --nt-input-bg: #141414;
+    --nt-input-border: rgba(255, 255, 255, 0.2);
+    --nt-muted-bg: rgba(255, 255, 255, 0.08);
+    --nt-success-bg: #162312;
+    --nt-success-text: #95de64;
+    --nt-success-border: #274916;
+    --nt-danger-bg: #2a1215;
+    --nt-danger-text: #ff7875;
+    --nt-danger-border: #58181c;
+}
+
+html.nt-dark body {
+    background: var(--nt-bg);
+    color: var(--nt-text);
+}
+
+html.nt-dark .btn {
+    background: var(--nt-surface);
+    color: var(--nt-text);
+    border-color: var(--nt-border);
+}
+
+html.nt-dark .btn-primary {
+    background: var(--nt-primary);
+    border-color: var(--nt-primary);
+    color: #fff;
+}
+
+html.nt-dark .site-header {
+    background: var(--nt-surface);
+}
+
+html.nt-dark .nt-table-wrap,
+html.nt-dark .data-table,
+html.nt-dark .nt-modal__panel,
+html.nt-dark .card,
+html.nt-dark .page-card,
+html.nt-dark .form-card,
+html.nt-dark .nt-toast {
+    background: var(--nt-surface);
+    border-color: var(--nt-border);
+    color: var(--nt-text);
+}
+
+html.nt-dark .page-card__title {
+    color: var(--nt-text);
+}
+
+html.nt-dark .nt-table,
+html.nt-dark .nt-table thead th,
+html.nt-dark .nt-table tbody td,
+html.nt-dark .data-table thead th,
+html.nt-dark .data-table tbody td {
+    color: var(--nt-text);
+    border-color: var(--nt-border);
+}
+
+html.nt-dark .nt-table thead th,
+html.nt-dark .data-table thead th,
+html.nt-dark .nt-table--zebra tbody tr:nth-child(even),
+html.nt-dark .data-table tbody tr:nth-child(even) {
+    background: rgba(255, 255, 255, 0.04);
+}
+
+html.nt-dark .nt-table--zebra tbody tr:nth-child(odd),
+html.nt-dark .nt-table__empty {
+    background: var(--nt-surface) !important;
+}
+
+html.nt-dark .nt-table tbody tr:hover,
+html.nt-dark .data-table tbody tr:hover {
+    background: rgba(var(--nt-primary-rgb, 22, 119, 255), 0.16) !important;
+}
+
+html.nt-dark .nt-form__label,
+html.nt-dark .nt-form label > span:not(.nt-form__hint),
+html.nt-dark .nt-confirm-text,
+html.nt-dark .nt-modal__title {
+    color: var(--nt-text);
+}
+
+html.nt-dark .nt-form input[type="text"],
+html.nt-dark .nt-form input[type="email"],
+html.nt-dark .nt-form input[type="password"],
+html.nt-dark .nt-form input[type="number"],
+html.nt-dark .nt-form input[type="search"],
+html.nt-dark .nt-form select,
+html.nt-dark .nt-form textarea,
+html.nt-dark .nt-datetime__input,
+html.nt-dark .nt-page-btn,
+html.nt-dark .nt-page-num {
+    background: #141414;
+    border-color: var(--nt-border);
+    color: var(--nt-text);
+}
+
+html.nt-dark .nt-page-num.is-active {
+    background: var(--nt-primary);
+    border-color: var(--nt-primary);
+    color: #fff;
+}
+
+html.nt-dark .nt-modal__header,
+html.nt-dark .nt-modal__footer {
+    border-color: var(--nt-border);
+}
+
+html.nt-dark .nt-toast--success {
+    background: #162312;
+    border-color: #274916;
+    color: #95de64;
+}
+
+html.nt-dark .nt-toast--error {
+    background: #2a1215;
+    border-color: #58181c;
+    color: #ff7875;
+}
+
+/* 暗色：侧栏 / 图标栏 / 顶栏 / 标签与页面同一套令牌，不另设独立色 */
+html.nt-dark .admin-sidebar,
+html.nt-dark .admin-rail,
+html.nt-dark .admin-topbar,
+html.nt-dark .admin-tabs {
+    background: var(--nt-surface);
+    border-color: var(--nt-border);
+    color: var(--nt-text);
+}
+
+html.nt-dark .admin-tab {
+    background: rgba(255, 255, 255, 0.04);
+    border-color: var(--nt-border);
+}
+
+html.nt-dark .admin-tab.is-active {
+    background: var(--nt-bg);
+    color: var(--nt-primary);
+}
+
+html.nt-dark .menu-icon,
+html.nt-dark .admin-rail__item .menu-icon {
+    filter: brightness(0) invert(1);
+    opacity: 0.75;
+}
+
+html.nt-dark .menu-item.is-active .menu-icon,
+html.nt-dark .menu-group.is-open .menu-group__trigger .menu-icon,
+html.nt-dark .admin-rail__item.is-active .menu-icon {
+    opacity: 1;
+    filter: brightness(0) saturate(100%) invert(36%) sepia(93%) saturate(2476%) hue-rotate(203deg) brightness(99%) contrast(101%);
+}
+
+html.nt-dark .admin-hmenu__drop {
+    background: var(--nt-surface);
+    border-color: var(--nt-border);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35);
+}

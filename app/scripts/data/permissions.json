@@ -1,10 +1,52 @@
 [
   {
+    "name": "系统管理",
+    "code": "system",
+    "description": "系统管理目录",
+    "type": "directory",
+    "icon": "layui-icon-set",
+    "sort_order": 1
+  },
+  {
     "name": "用户管理",
+    "code": "system.menu.users",
+    "description": "系统管理-用户页面",
+    "type": "menu",
+    "path": "/admin/system/users",
+    "icon": "layui-icon-user",
+    "open_type": "_self",
+    "parent_code": "system",
+    "sort_order": 1
+  },
+  {
+    "name": "角色管理",
+    "code": "system.menu.roles",
+    "description": "系统管理-角色页面",
+    "type": "menu",
+    "path": "/admin/system/roles",
+    "icon": "layui-icon-group",
+    "open_type": "_self",
+    "parent_code": "system",
+    "sort_order": 2
+  },
+  {
+    "name": "权限管理",
+    "code": "system.menu.permissions",
+    "description": "系统管理-权限页面",
+    "type": "menu",
+    "path": "/admin/system/permissions",
+    "icon": "layui-icon-vercode",
+    "open_type": "_self",
+    "parent_code": "system",
+    "sort_order": 3
+  },
+  {
+    "name": "用户管理API",
     "code": "user.manage",
     "description": "用户增删改查",
     "type": "api",
     "path": "/api/v1/system/users",
+    "parent_code": "system.menu.users",
     "sort_order": 10
   },
   {
@@ -13,31 +55,8 @@
     "description": "重置用户密码",
     "type": "api",
     "path": "/api/v1/system/users/*/reset-password",
+    "parent_code": "system.menu.users",
     "sort_order": 11
-  },
-  {
-    "name": "菜单-用户管理",
-    "code": "system.menu.users",
-    "description": "系统管理-用户页面",
-    "type": "menu",
-    "path": "/admin/system/users",
-    "sort_order": 1
-  },
-  {
-    "name": "菜单-角色管理",
-    "code": "system.menu.roles",
-    "description": "系统管理-角色页面",
-    "type": "menu",
-    "path": "/admin/system/roles",
-    "sort_order": 2
-  },
-  {
-    "name": "菜单-权限管理",
-    "code": "system.menu.permissions",
-    "description": "系统管理-权限页面",
-    "type": "menu",
-    "path": "/admin/system/permissions",
-    "sort_order": 3
   },
   {
     "name": "角色管理API",
@@ -45,6 +64,7 @@
     "description": "角色增删改查",
     "type": "api",
     "path": "/api/v1/system/roles",
+    "parent_code": "system.menu.roles",
     "sort_order": 20
   },
   {
@@ -53,6 +73,7 @@
     "description": "权限增删改查",
     "type": "api",
     "path": "/api/v1/system/permissions",
+    "parent_code": "system.menu.permissions",
     "sort_order": 30
   }
 ]

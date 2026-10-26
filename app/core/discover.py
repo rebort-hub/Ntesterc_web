@@ -1,16 +1,6 @@
-"""
-插件式路由发现（对齐 backend ``app/core/discover.py``）。
-
-- 插件目录：``app/plugin/module_*``
-- 每个业务能力子目录含 ``controller.py``，模块顶层定义 ``APIRouter`` 实例
-- ``module_xxx`` → URL 前缀 ``/xxx``（挂在 v1 插件根路由下）
-"""
-
 import importlib
 from pathlib import Path
-
 from fastapi import APIRouter
-
 from app.log.config.log_config import get_logger
 
 logger = get_logger(__name__)

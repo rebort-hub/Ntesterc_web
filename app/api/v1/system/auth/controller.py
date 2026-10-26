@@ -1,6 +1,5 @@
 from fastapi import APIRouter, Depends, Request
 from sqlalchemy.ext.asyncio import AsyncSession
-
 from app.core.database import get_db
 from app.core.exceptions.auth import MissingTokenError
 from app.api.v1.system.auth.schemas import RefreshTokenResponse, TokenResponse

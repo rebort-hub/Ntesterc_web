@@ -1,10 +1,14 @@
 {% extends "layouts/base.html" %}
+{% from "macros/icons.html" import nt_icon %}
 
 {% block body_class %}layout-admin{% endblock %}
 
 {% block head_extra %}
 <link rel="stylesheet" href="{{ url_for('static', path='css/admin.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', path='css/components.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', path='css/loader.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', path='css/layui-icons.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', path='css/icons.css') }}">
 {% block admin_page_extra_head %}{% endblock %}
 {% if active_module == 'system' %}
 <link rel="stylesheet" href="{{ url_for('static', path='modules/system/css/system.css') }}">
@@ -15,7 +19,35 @@
 {% endblock %}
 
 {% block body %}
-<div class="admin-shell">
+<div class="loader-wrapper" id="nt-loader" aria-hidden="false">
+    <div class="loader"></div>
+</div>
+<div class="admin-shell"
+     id="admin-shell"
+     data-page-title="{% block page_title %}{{ title }}{% endblock %}"
+     data-page-path="{{ request.url.path }}">
+
+    {# 双列：左侧图标栏 #}
+    <aside class="admin-rail" id="admin-rail" aria-label="一级导航">
+        <a href="{{ web_admin_prefix }}"
+           class="admin-rail__item {% if active_nav == 'dashboard' %}is-active{% endif %}"
+           data-rail="dashboard"
+           title="控制台">
+            {{ nt_icon('layui-icon-console') }}
+        </a>
+        {% for group in web_menu_groups %}
+        {% set rail_first = group.children[0] if group.children else none %}
+        <a href="{{ rail_first.path if rail_first else web_admin_prefix }}"
+           class="admin-rail__item {% if active_module == group.code %}is-active{% endif %}"
+           data-rail="{{ group.code }}"
+           data-first-href="{{ rail_first.path if rail_first else '' }}"
+           title="{{ group.name }}">
+            {{ nt_icon(group.icon, 'layui-icon-set') }}
+        </a>
+        {% endfor %}
+    </aside>
+
+    {# 垂直 / 混合 / 双列：侧栏 #}
     <aside class="admin-sidebar" id="admin-sidebar">
         <div class="sidebar-brand">
             <a href="{{ web_admin_prefix }}" class="sidebar-brand__link">
@@ -23,24 +55,34 @@
                 <span class="sidebar-brand__title">{{ app_name }}</span>
             </a>
         </div>
-        <nav class="sidebar-menu" aria-label="主导航">
+        <nav class="sidebar-menu" id="sidebar-menu" aria-label="主导航">
             <a href="{{ web_admin_prefix }}"
-               class="menu-item menu-item--root {% if active_nav == 'dashboard' %}is-active{% endif %}">
-                <span class="menu-icon menu-icon--dashboard" aria-hidden="true"></span>
+               class="menu-item menu-item--root {% if active_nav == 'dashboard' %}is-active{% endif %}"
+               data-menu-leaf
+               data-menu-group-code="dashboard"
+               data-tab-title="控制台">
+                {{ nt_icon('layui-icon-console') }}
                 <span class="menu-label">控制台</span>
             </a>
             {% for group in web_menu_groups %}
-            <div class="menu-group {% if active_module == group.code %}is-open{% endif %}" data-menu-group>
-                <button type="button" class="menu-group__trigger" aria-expanded="{% if active_module == group.code %}true{% else %}false{% endif %}">
-                    <span class="menu-icon menu-icon--{{ group.icon | default('folder') }}" aria-hidden="true"></span>
+            <div class="menu-group {% if active_module == group.code %}is-open{% endif %}"
+                 data-menu-group
+                 data-group-code="{{ group.code }}">
+                <button type="button"
+                        class="menu-group__trigger"
+                        aria-expanded="{% if active_module == group.code %}true{% else %}false{% endif %}">
+                    {{ nt_icon(group.icon, 'layui-icon-set') }}
                     <span class="menu-label">{{ group.name }}</span>
                     <span class="menu-group__arrow" aria-hidden="true"></span>
                 </button>
                 <div class="menu-group__panel">
                     {% for item in group.children %}
                     <a href="{{ item.path }}"
-                       class="menu-item menu-item--sub {% if active_module == group.code and active_nav == item.code %}is-active{% endif %}">
-                        <span class="menu-icon menu-icon--{{ item.icon | default('dot') }}" aria-hidden="true"></span>
+                       class="menu-item menu-item--sub {% if active_module == group.code and active_nav == item.code %}is-active{% endif %}"
+                       data-menu-leaf
+                       data-menu-group-code="{{ group.code }}"
+                       data-tab-title="{{ item.name }}">
+                        {{ nt_icon(item.icon, 'layui-icon-circle-dot') }}
                         <span class="menu-label">{{ item.name }}</span>
                     </a>
                     {% endfor %}
@@ -49,29 +91,179 @@
             {% endfor %}
         </nav>
     </aside>
+
     <div class="admin-main">
         <header class="admin-topbar">
             <div class="admin-topbar__left">
+                <a href="{{ web_admin_prefix }}" class="topbar-brand" aria-label="{{ app_name }}">
+                    <img class="topbar-brand__logo" src="{{ url_for('static', path=static_logo) }}" alt="">
+                    <span class="topbar-brand__title">{{ app_name }}</span>
+                </a>
                 <button type="button" class="sidebar-toggle" id="sidebar-toggle" aria-label="折叠菜单">
                     <span></span><span></span><span></span>
                 </button>
-                <h1 class="admin-topbar__title">{% block page_title %}{{ title }}{% endblock %}</h1>
+                {# 水平 / 混合：顶栏一级菜单 #}
+                <nav class="admin-hmenu" id="admin-hmenu" aria-label="顶栏导航">
+                    <a href="{{ web_admin_prefix }}"
+                       class="admin-hmenu__item {% if active_nav == 'dashboard' %}is-active{% endif %}"
+                       data-hmenu="dashboard"
+                       data-tab-title="控制台">控制台</a>
+                    {% for group in web_menu_groups %}
+                    {% set first_child = group.children[0] if group.children else none %}
+                    <div class="admin-hmenu__group {% if active_module == group.code %}is-active{% endif %}"
+                         data-hmenu-group="{{ group.code }}"
+                         data-first-href="{{ first_child.path if first_child else '' }}">
+                        <a href="{{ first_child.path if first_child else web_admin_prefix }}"
+                           class="admin-hmenu__item admin-hmenu__trigger"
+                           data-hmenu="{{ group.code }}"
+                           data-tab-title="{{ first_child.name if first_child else group.name }}">
+                            {{ group.name }}
+                            <span class="admin-hmenu__caret" aria-hidden="true"></span>
+                        </a>
+                        <div class="admin-hmenu__drop">
+                            {% for item in group.children %}
+                            <a href="{{ item.path }}"
+                               class="admin-hmenu__drop-item {% if active_module == group.code and active_nav == item.code %}is-active{% endif %}"
+                               data-tab-title="{{ item.name }}">{{ item.name }}</a>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </nav>
+                <h1 class="admin-topbar__title">{{ self.page_title() }}</h1>
             </div>
             <div class="admin-topbar__right">
-                <span class="admin-user">{{ current_user.username }}</span>
-                <a class="admin-logout" href="/logout">退出</a>
+                <nav class="admin-toolbar" aria-label="快捷操作">
+                    <button type="button" class="admin-toolbar__btn" id="nt-menu-search" aria-label="菜单搜索" title="菜单搜索">
+                        <i class="layui-icon layui-icon-search" aria-hidden="true"></i>
+                    </button>
+                    <button type="button" class="admin-toolbar__btn" id="nt-notice" aria-label="消息" title="消息">
+                        <i class="layui-icon layui-icon-notice" aria-hidden="true"></i>
+                    </button>
+                    <button type="button" class="admin-toolbar__btn" id="nt-fullscreen" aria-label="全屏" title="全屏">
+                        <i class="layui-icon layui-icon-screen-full" aria-hidden="true"></i>
+                    </button>
+                    <div class="admin-toolbar__user" id="nt-user-menu">
+                        <button type="button" class="admin-toolbar__btn admin-toolbar__user-btn" aria-label="用户菜单" aria-expanded="false" aria-haspopup="true" title="{{ current_user.username }}">
+                            <i class="layui-icon layui-icon-username" aria-hidden="true"></i>
+                        </button>
+                        <div class="admin-toolbar__drop" hidden>
+                            <div class="admin-toolbar__drop-head">{{ current_user.username }}</div>
+                            <a class="admin-toolbar__drop-item" href="/logout">退出登录</a>
+                        </div>
+                    </div>
+                    <button type="button" class="admin-toolbar__btn" id="nt-theme-open" aria-label="主题设置" title="主题设置">
+                        <i class="layui-icon layui-icon-more-vertical" aria-hidden="true"></i>
+                    </button>
+                </nav>
             </div>
         </header>
+
+        <div class="admin-tabs" id="admin-tabs" aria-label="页签">
+            <div class="admin-tabs__list" id="admin-tabs-list"></div>
+            <div class="admin-tabs__control" aria-label="页签快捷操作">
+                <button type="button" class="admin-tabs__ctrl" id="nt-tabs-prev" title="向左滚动" aria-label="向左滚动">
+                    <i class="layui-icon layui-icon-left" aria-hidden="true"></i>
+                </button>
+                <button type="button" class="admin-tabs__ctrl" id="nt-tabs-next" title="向右滚动" aria-label="向右滚动">
+                    <i class="layui-icon layui-icon-right" aria-hidden="true"></i>
+                </button>
+                <div class="admin-tabs__tool" id="nt-tabs-tool">
+                    <button type="button" class="admin-tabs__ctrl" id="nt-tabs-tool-btn" title="快捷操作" aria-label="快捷操作" aria-expanded="false" aria-haspopup="true">
+                        <i class="layui-icon layui-icon-down" aria-hidden="true"></i>
+                    </button>
+                    <ul class="admin-tabs__menu" id="nt-tabs-menu" hidden>
+                        <li><button type="button" data-nt-tabs-action="close-this">关闭当前</button></li>
+                        <li><button type="button" data-nt-tabs-action="close-other">关闭其他</button></li>
+                        <li><button type="button" data-nt-tabs-action="close-all">关闭所有</button></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
         <main class="admin-content">
             {% include "partials/flash.html" %}
             {% block content %}{% endblock %}
         </main>
     </div>
 </div>
-<script src="{{ url_for('static', path='js/components.js') }}" defer></script>
-<script src="{{ url_for('static', path='js/admin.js') }}" defer></script>
+
+<aside class="nt-drawer" id="nt-theme-drawer" aria-hidden="true" role="dialog" aria-modal="true" aria-label="主题设置">
+    <div class="nt-drawer__mask" data-nt-drawer-close></div>
+    <div class="nt-drawer__panel">
+        <header class="nt-drawer__header">
+            <h2 class="nt-drawer__title">主题设置</h2>
+            <button type="button" class="nt-drawer__close" data-nt-drawer-close aria-label="关闭">×</button>
+        </header>
+        <div class="nt-drawer__body">
+            <section class="nt-theme-section">
+                <h3 class="nt-theme-section__title">菜单布局</h3>
+                <div class="nt-theme-skins nt-theme-skins--layout">
+                    <button type="button" class="nt-theme-skin" data-nt-layout="vertical" title="垂直">
+                        <span class="nt-theme-skin__preview nt-theme-skin__preview--layout-vertical">
+                            <span class="side"></span><span class="main"><span class="bar"></span></span>
+                        </span>
+                        <span class="nt-theme-skin__label">垂直</span>
+                    </button>
+                    <button type="button" class="nt-theme-skin" data-nt-layout="horizontal" title="水平">
+                        <span class="nt-theme-skin__preview nt-theme-skin__preview--layout-horizontal">
+                            <span class="bar"></span><span class="main"></span>
+                        </span>
+                        <span class="nt-theme-skin__label">水平</span>
+                    </button>
+                    <button type="button" class="nt-theme-skin" data-nt-layout="mixed" title="混合">
+                        <span class="nt-theme-skin__preview nt-theme-skin__preview--layout-mixed">
+                            <span class="bar"></span><span class="body"><span class="side"></span><span class="main"></span></span>
+                        </span>
+                        <span class="nt-theme-skin__label">混合</span>
+                    </button>
+                    <button type="button" class="nt-theme-skin" data-nt-layout="columns" title="双列">
+                        <span class="nt-theme-skin__preview nt-theme-skin__preview--layout-columns">
+                            <span class="rail"></span><span class="side"></span><span class="main"><span class="bar"></span></span>
+                        </span>
+                        <span class="nt-theme-skin__label">双列</span>
+                    </button>
+                </div>
+            </section>
+            <section class="nt-theme-section">
+                <h3 class="nt-theme-section__title">主题色</h3>
+                <div class="nt-theme-colors">
+                    <button type="button" class="nt-theme-color" data-nt-color="#1677ff" style="background:#1677ff" title="#1677ff"></button>
+                    <button type="button" class="nt-theme-color" data-nt-color="#16baaa" style="background:#16baaa" title="#16baaa"></button>
+                    <button type="button" class="nt-theme-color" data-nt-color="#52c41a" style="background:#52c41a" title="#52c41a"></button>
+                    <button type="button" class="nt-theme-color" data-nt-color="#faad14" style="background:#faad14" title="#faad14"></button>
+                    <button type="button" class="nt-theme-color" data-nt-color="#f5222d" style="background:#f5222d" title="#f5222d"></button>
+                    <button type="button" class="nt-theme-color" data-nt-color="#722ed1" style="background:#722ed1" title="#722ed1"></button>
+                    <button type="button" class="nt-theme-color" data-nt-color="#eb2f96" style="background:#eb2f96" title="#eb2f96"></button>
+                    <button type="button" class="nt-theme-color" data-nt-color="#13c2c2" style="background:#13c2c2" title="#13c2c2"></button>
+                </div>
+            </section>
+            <section class="nt-theme-section">
+                <h3 class="nt-theme-section__title">更多设置</h3>
+                <div class="nt-theme-row">
+                    <span class="nt-theme-row__label">多标签页</span>
+                    <label class="nt-switch">
+                        <input type="checkbox" data-nt-tabs>
+                        <span class="nt-switch__track"></span>
+                    </label>
+                </div>
+                <div class="nt-theme-row">
+                    <span class="nt-theme-row__label">夜间模式</span>
+                    <label class="nt-switch">
+                        <input type="checkbox" data-nt-dark>
+                        <span class="nt-switch__track"></span>
+                    </label>
+                </div>
+            </section>
+        </div>
+    </div>
+</aside>
+
+<script src="{{ url_for('static', path='js/components.js') }}?v=7" defer></script>
+<script src="{{ url_for('static', path='js/tabs.js') }}?v=7" defer></script>
+<script src="{{ url_for('static', path='js/admin.js') }}?v=7" defer></script>
 {% if active_module == 'system' %}
-<script src="{{ url_for('static', path='modules/system/js/system.js') }}" defer></script>
+<script src="{{ url_for('static', path='modules/system/js/system.js') }}?v=6" defer></script>
 {% endif %}
 {% block admin_page_scripts %}{% endblock %}
 {% endblock %}

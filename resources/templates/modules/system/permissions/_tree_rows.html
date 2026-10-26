@@ -1,0 +1,59 @@
+{# 递归渲染权限树行；调用方传入 nodes、depth #}
+{% for p in nodes %}
+{% set has_children = p.children and p.children|length > 0 %}
+<tr class="nt-tree-row {% if depth > 0 %}is-child{% endif %}"
+    data-id="{{ p.id }}"
+    data-parent="{{ p.parent_id or '' }}"
+    data-depth="{{ depth }}">
+    <td>{{ p.id }}</td>
+    <td>
+        <div class="nt-tree-name" style="padding-left: {{ depth * 20 }}px">
+            {% if has_children %}
+            <button type="button" class="nt-tree-toggle is-open" data-nt-tree-toggle aria-label="展开/折叠">▾</button>
+            {% else %}
+            <span class="nt-tree-toggle is-leaf" aria-hidden="true"></span>
+            {% endif %}
+            {% if p.icon %}
+            <i class="layui-icon {{ p.icon|nt_icon }}" aria-hidden="true"></i>
+            {% endif %}
+            <span>{{ p.name }}</span>
+        </div>
+    </td>
+    <td>
+        {% if p.icon %}
+        <i class="layui-icon {{ p.icon|nt_icon }}" title="{{ p.icon }}" aria-hidden="true"></i>
+        <code class="nt-ico-code">{{ p.icon|nt_icon }}</code>
+        {% else %}—{% endif %}
+    </td>
+    <td><span class="tag tag-type-{{ p.type }}">{{ type_labels.get(p.type, p.type) }}</span></td>
+    <td><code>{{ p.code }}</code></td>
+    <td>{{ p.path or '—' }}</td>
+    <td>{{ open_type_labels.get(p.open_type, p.open_type or '—') }}</td>
+    <td>{{ p.sort_order }}</td>
+    <td class="actions-cell">
+        <button type="button"
+                class="btn btn-sm"
+                data-nt-modal-open="permFormModal"
+                data-nt-modal-title="编辑权限"
+                data-nt-form="permForm"
+                data-nt-action="{{ list_url }}/{{ p.id }}/edit"
+                data-nt-fill='{{ {"name": p.name, "code": p.code, "type": p.type, "path": p.path or "", "parent_id": p.parent_id or "", "sort_order": p.sort_order, "description": p.description or "", "icon": p.icon or "", "open_type": p.open_type or ""}|tojson }}'>
+            编辑
+        </button>
+        <button type="button"
+                class="btn btn-sm btn-danger"
+                data-nt-modal-open="permDeleteModal"
+                data-nt-modal-title="删除权限"
+                data-nt-form="permDeleteForm"
+                data-nt-action="{{ list_url }}/{{ p.id }}/delete"
+                data-nt-confirm-text="确定删除权限「{{ p.name }}」？删除后不可恢复。">
+            删除
+        </button>
+    </td>
+</tr>
+{% if has_children %}
+{% with nodes=p.children, depth=depth + 1 %}
+{% include "modules/system/permissions/_tree_rows.html" %}
+{% endwith %}
+{% endif %}
+{% endfor %}

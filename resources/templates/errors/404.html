@@ -1,19 +1,11 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <title></title>
-    {% include 'common/header.html' %}
-    <link href="{{ url_for('static', filename='system/admin/css/other/error.css') }}" rel="stylesheet"/>
-</head>
-<body>
-<div class="content">
-    <img src="{{ url_for('static', filename='system/admin/images/404.svg') }}" alt="">
-    <div class="content-r">
-        <h1>404</h1>
-        <p>抱歉，你访问的页面不存在或仍在开发中</p>
-        <button class="layui-btn layui-btn-primary">返回首页</button>
-    </div>
-</div>
-</body>
-</html>
+{% extends "errors/base_error.html" %}
+
+{% block title %}404{% endblock %}
+
+{% block error_illust %}
+<img class="nt-error__illust" src="{{ url_for('static', path='images/errors/404.svg') }}" alt="">
+{% endblock %}
+
+{% block error_code %}404{% endblock %}
+
+{% block error_message %}抱歉，你访问的页面不存在或仍在开发中{% endblock %}

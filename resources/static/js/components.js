@@ -45,6 +45,9 @@
         } else {
           field.value = value == null ? "" : String(value);
         }
+        if (field.hasAttribute("data-nt-icon-picker")) {
+          field.dispatchEvent(new Event("change", { bubbles: true }));
+        }
       });
     });
   }

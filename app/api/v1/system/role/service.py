@@ -1,7 +1,5 @@
 from typing import Optional, Sequence
-
 from sqlalchemy.ext.asyncio import AsyncSession
-
 from app.api.v1.system.role.model import Role
 from app.api.v1.system.role.repository import RoleRepository
 from app.api.v1.system.role.schemas import RoleCreate, RoleUpdate

@@ -1,8 +1,6 @@
 from datetime import datetime
-
 from sqlalchemy import Boolean, DateTime, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-
 from app.core.models.base import ModelBase
 from app.core.security.token import get_password_hash, verify_password as verify_hash
 

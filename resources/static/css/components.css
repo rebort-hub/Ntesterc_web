@@ -2,9 +2,9 @@
 .nt-table-wrap {
     width: 100%;
     overflow-x: auto;
-    border: 1px solid rgba(5, 5, 5, 0.06);
+    border: 1px solid var(--nt-border, rgba(5, 5, 5, 0.06));
     border-radius: 8px;
-    background: #fff;
+    background: var(--nt-surface, #fff);
 }
 
 .nt-table {
@@ -12,7 +12,7 @@
     border-collapse: separate;
     border-spacing: 0;
     font-size: 14px;
-    color: rgba(0, 0, 0, 0.88);
+    color: var(--nt-text, rgba(0, 0, 0, 0.88));
 }
 
 .nt-table thead th {
@@ -20,15 +20,15 @@
     text-align: left;
     font-weight: 600;
     font-size: 13px;
-    color: rgba(0, 0, 0, 0.65);
-    background: #fafafa;
-    border-bottom: 1px solid rgba(5, 5, 5, 0.06);
+    color: var(--nt-text-secondary, rgba(0, 0, 0, 0.65));
+    background: var(--nt-muted-bg, #fafafa);
+    border-bottom: 1px solid var(--nt-border, rgba(5, 5, 5, 0.06));
     white-space: nowrap;
 }
 
 .nt-table tbody td {
     padding: 12px 16px;
-    border-bottom: 1px solid rgba(5, 5, 5, 0.06);
+    border-bottom: 1px solid var(--nt-border, rgba(5, 5, 5, 0.06));
     vertical-align: middle;
 }
 
@@ -37,15 +37,15 @@
 }
 
 .nt-table--zebra tbody tr:nth-child(odd) {
-    background: #fff;
+    background: var(--nt-surface, #fff);
 }
 
 .nt-table--zebra tbody tr:nth-child(even) {
-    background: #fafafa;
+    background: var(--nt-muted-bg, #fafafa);
 }
 
 .nt-table tbody tr:hover {
-    background: #e6f4ff !important;
+    background: rgba(var(--nt-primary-rgb, 22, 119, 255), 0.1) !important;
 }
 
 .nt-table th.is-center,
@@ -60,9 +60,9 @@
 
 .nt-table__empty {
     text-align: center !important;
-    color: rgba(0, 0, 0, 0.45);
+    color: var(--nt-text-secondary, rgba(0, 0, 0, 0.45));
     padding: 32px 16px !important;
-    background: #fff !important;
+    background: var(--nt-surface, #fff) !important;
 }
 
 .nt-table .actions-cell {
@@ -107,7 +107,7 @@
     font-size: 14px;
     font-weight: 500;
     line-height: 1.4;
-    color: rgba(0, 0, 0, 0.88);
+    color: var(--nt-text, rgba(0, 0, 0, 0.88));
 }
 
 .nt-form__hint {
@@ -115,7 +115,7 @@
     margin-top: 6px;
     font-size: 12px;
     line-height: 1.5;
-    color: rgba(0, 0, 0, 0.45);
+    color: var(--nt-text-secondary, rgba(0, 0, 0, 0.45));
 }
 
 .nt-form label > span:not(.nt-form__hint) {
@@ -124,7 +124,7 @@
     font-size: 14px;
     font-weight: 500;
     line-height: 1.4;
-    color: rgba(0, 0, 0, 0.88);
+    color: var(--nt-text, rgba(0, 0, 0, 0.88));
 }
 
 .nt-form input[type="text"],
@@ -138,13 +138,13 @@
     box-sizing: border-box;
     height: var(--nt-control-height, 32px);
     padding: 0 11px;
-    border: 1px solid #d9d9d9;
+    border: 1px solid var(--nt-input-border, #d9d9d9);
     border-radius: 6px;
     font-family: inherit;
     font-size: 14px;
     line-height: 1.5715;
-    color: rgba(0, 0, 0, 0.88);
-    background: #fff;
+    color: var(--nt-text, rgba(0, 0, 0, 0.88));
+    background: var(--nt-input-bg, #fff);
     outline: none;
     transition: border-color 0.2s, box-shadow 0.2s;
 }
@@ -176,7 +176,7 @@
     align-items: center;
     gap: 8px;
     font-size: 14px;
-    color: rgba(0, 0, 0, 0.88);
+    color: var(--nt-text, rgba(0, 0, 0, 0.88));
 }
 
 .nt-form label.checkbox input {
@@ -188,7 +188,7 @@
 .nt-confirm-text {
     margin: 0;
     font-size: 14px;
-    color: rgba(0, 0, 0, 0.88);
+    color: var(--nt-text, rgba(0, 0, 0, 0.88));
     line-height: 1.6;
 }
 
@@ -205,10 +205,11 @@
     border-collapse: separate;
     border-spacing: 0;
     font-size: 14px;
-    border: 1px solid rgba(5, 5, 5, 0.06);
+    border: 1px solid var(--nt-border, rgba(5, 5, 5, 0.06));
     border-radius: 8px;
     overflow: hidden;
-    background: #fff;
+    background: var(--nt-surface, #fff);
+    color: var(--nt-text, rgba(0, 0, 0, 0.88));
 }
 
 .data-table thead th {
@@ -216,27 +217,27 @@
     text-align: left;
     font-weight: 600;
     font-size: 13px;
-    color: rgba(0, 0, 0, 0.65);
-    background: #fafafa;
-    border-bottom: 1px solid rgba(5, 5, 5, 0.06);
+    color: var(--nt-text-secondary, rgba(0, 0, 0, 0.65));
+    background: var(--nt-muted-bg, #fafafa);
+    border-bottom: 1px solid var(--nt-border, rgba(5, 5, 5, 0.06));
 }
 
 .data-table tbody td {
     padding: 12px 16px;
-    border-bottom: 1px solid rgba(5, 5, 5, 0.06);
+    border-bottom: 1px solid var(--nt-border, rgba(5, 5, 5, 0.06));
 }
 
 .data-table tbody tr:nth-child(even) {
-    background: #fafafa;
+    background: var(--nt-muted-bg, #fafafa);
 }
 
 .data-table tbody tr:hover {
-    background: #e6f4ff;
+    background: rgba(var(--nt-primary-rgb, 22, 119, 255), 0.1);
 }
 
 .data-table .empty {
     text-align: center;
-    color: rgba(0, 0, 0, 0.45);
+    color: var(--nt-text-secondary, rgba(0, 0, 0, 0.45));
     padding: 32px 16px;
 }
 
@@ -252,7 +253,7 @@
 
 .nt-pagination__total {
     font-size: 13px;
-    color: rgba(0, 0, 0, 0.45);
+    color: var(--nt-text-secondary, rgba(0, 0, 0, 0.45));
 }
 
 .nt-pagination__pager {
@@ -269,10 +270,10 @@
     min-width: 32px;
     height: 32px;
     padding: 0 8px;
-    border: 1px solid #d9d9d9;
+    border: 1px solid var(--nt-input-border, #d9d9d9);
     border-radius: 6px;
-    background: #fff;
-    color: rgba(0, 0, 0, 0.88);
+    background: var(--nt-input-bg, #fff);
+    color: var(--nt-text, rgba(0, 0, 0, 0.88));
     font-size: 13px;
     text-decoration: none;
     box-sizing: border-box;
@@ -280,21 +281,21 @@
 
 .nt-page-btn:hover,
 .nt-page-num:hover {
-    border-color: #1677ff;
-    color: #1677ff;
+    border-color: var(--nt-primary, #1677ff);
+    color: var(--nt-primary, #1677ff);
 }
 
 .nt-page-num.is-active {
-    background: #1677ff;
-    border-color: #1677ff;
+    background: var(--nt-primary, #1677ff);
+    border-color: var(--nt-primary, #1677ff);
     color: #fff;
 }
 
 .nt-page-btn.is-disabled {
-    color: rgba(0, 0, 0, 0.25);
-    border-color: #d9d9d9;
+    color: var(--nt-text-secondary, rgba(0, 0, 0, 0.25));
+    border-color: var(--nt-input-border, #d9d9d9);
     cursor: not-allowed;
-    background: #f5f5f5;
+    background: var(--nt-muted-bg, #f5f5f5);
 }
 
 .nt-page-ellipsis {
@@ -330,7 +331,8 @@
     max-height: calc(100vh - 48px);
     display: flex;
     flex-direction: column;
-    background: #fff;
+    background: var(--nt-surface, #fff);
+    color: var(--nt-text, rgba(0, 0, 0, 0.88));
     border-radius: 8px;
     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08), 0 3px 6px -4px rgba(0, 0, 0, 0.12);
     overflow: hidden;
@@ -348,7 +350,7 @@
     align-items: center;
     justify-content: space-between;
     padding: 16px 20px;
-    border-bottom: 1px solid rgba(5, 5, 5, 0.06);
+    border-bottom: 1px solid var(--nt-border, rgba(5, 5, 5, 0.06));
 }
 
 .nt-modal__title {
@@ -356,7 +358,7 @@
     font-size: 16px;
     font-weight: 600;
     line-height: 1.5;
-    color: rgba(0, 0, 0, 0.88);
+    color: var(--nt-text, rgba(0, 0, 0, 0.88));
 }
 
 .nt-modal__close {
@@ -386,7 +388,7 @@
     justify-content: flex-end;
     gap: 8px;
     padding: 12px 20px 16px;
-    border-top: 1px solid rgba(5, 5, 5, 0.06);
+    border-top: 1px solid var(--nt-border, rgba(5, 5, 5, 0.06));
 }
 
 .nt-modal__footer .btn {
@@ -416,19 +418,19 @@ body.nt-modal-open {
     box-sizing: border-box;
     height: var(--nt-control-height, 32px);
     padding: 0 11px;
-    border: 1px solid #d9d9d9;
+    border: 1px solid var(--nt-input-border, #d9d9d9);
     border-radius: 6px;
     font-size: 14px;
     line-height: 1;
-    background: #fff;
-    color: rgba(0, 0, 0, 0.88);
+    background: var(--nt-input-bg, #fff);
+    color: var(--nt-text, rgba(0, 0, 0, 0.88));
     min-width: 160px;
 }
 
 .nt-datetime__input:focus {
-    border-color: #1677ff;
+    border-color: var(--nt-primary, #1677ff);
     outline: none;
-    box-shadow: 0 0 0 2px rgb(22 119 255 / 10%);
+    box-shadow: 0 0 0 2px rgba(var(--nt-primary-rgb, 22, 119, 255), 0.1);
 }
 
 .nt-date-range {

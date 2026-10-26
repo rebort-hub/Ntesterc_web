@@ -4,11 +4,35 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}{{ title | default(app_name) }}{% endblock %} — {{ app_name }}</title>
+    <script>
+    (function () {
+        try {
+            var t = JSON.parse(localStorage.getItem("nt-theme") || "{}");
+            var layout = t.layout || "vertical";
+            if (["vertical", "horizontal", "mixed", "columns"].indexOf(layout) < 0) layout = "vertical";
+            document.documentElement.setAttribute("data-nt-layout", layout);
+            if (t.tabs === false) document.documentElement.classList.add("nt-tabs-off");
+            if (t.dark) document.documentElement.classList.add("nt-dark");
+            if (t.primary) {
+                document.documentElement.style.setProperty("--nt-primary", t.primary);
+                var h = String(t.primary).replace("#", "");
+                if (h.length === 3) h = h[0] + h[0] + h[1] + h[1] + h[2] + h[2];
+                if (h.length === 6) {
+                    var r = parseInt(h.slice(0, 2), 16), g = parseInt(h.slice(2, 4), 16), b = parseInt(h.slice(4, 6), 16);
+                    document.documentElement.style.setProperty("--nt-primary-rgb", r + ", " + g + ", " + b);
+                    document.documentElement.style.setProperty("--nt-menu-active-bg", "rgba(" + r + ", " + g + ", " + b + ", 0.1)");
+                    document.documentElement.style.setProperty("--nt-menu-active-color", t.primary);
+                }
+            }
+        } catch (e) {}
+    })();
+    </script>
     <link rel="stylesheet" href="{{ url_for('static', path='css/site.css') }}">
-    <style>:root { --nt-primary: #1677ff; }</style>
+    <link rel="stylesheet" href="{{ url_for('static', path='css/theme.css') }}">
     {% block head_extra %}{% endblock %}
 </head>
 <body class="{% block body_class %}{% endblock %}">
+    <script src="{{ url_for('static', path='js/theme.js') }}"></script>
     {% block body %}{% endblock %}
     <script src="{{ url_for('static', path='js/site.js') }}" defer></script>
     {% block scripts %}{% endblock %}

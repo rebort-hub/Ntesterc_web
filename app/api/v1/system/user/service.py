@@ -1,7 +1,5 @@
 from typing import Optional, Sequence
-
 from sqlalchemy.ext.asyncio import AsyncSession
-
 from app.api.v1.system.user.model import User
 from app.api.v1.system.user.repository import UserRepository
 from app.api.v1.system.user.schemas import UserCreate, UserUpdate

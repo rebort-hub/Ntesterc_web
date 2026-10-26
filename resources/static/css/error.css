@@ -1,0 +1,68 @@
+/* 独立错误页（403 / 404 / 500 等） */
+.layout-error {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 32px 20px;
+    background: var(--nt-bg, #f5f7fb);
+    color: var(--nt-text, rgba(0, 0, 0, 0.88));
+}
+
+.nt-error {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 48px;
+    flex-wrap: wrap;
+    max-width: 900px;
+    width: 100%;
+}
+
+.nt-error__illust {
+    width: min(360px, 100%);
+    height: auto;
+    flex-shrink: 0;
+}
+
+.nt-error__body {
+    min-width: 220px;
+    max-width: 360px;
+}
+
+.nt-error__code {
+    margin: 0 0 12px;
+    font-size: 72px;
+    line-height: 1;
+    font-weight: 600;
+    color: var(--nt-text-secondary, rgba(0, 0, 0, 0.45));
+}
+
+.nt-error__msg {
+    margin: 0 0 24px;
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--nt-text-secondary, rgba(0, 0, 0, 0.45));
+}
+
+.nt-error__actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+@media (max-width: 640px) {
+    .nt-error {
+        flex-direction: column;
+        text-align: center;
+        gap: 24px;
+    }
+
+    .nt-error__code {
+        font-size: 56px;
+    }
+
+    .nt-error__actions {
+        justify-content: center;
+    }
+}

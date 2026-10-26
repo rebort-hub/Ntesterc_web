@@ -50,9 +50,25 @@ async def _seed_all(db: AsyncSession) -> None:
             await db.flush()
 
         elif table == "permissions":
+            pending_parents: list[tuple[Permission, str]] = []
             for item in rows:
-                db.add(Permission(**item))
+                raw = dict(item)
+                parent_code = raw.pop("parent_code", None)
+                perm = Permission(**raw)
+                db.add(perm)
+                if parent_code:
+                    pending_parents.append((perm, parent_code))
             await db.flush()
+            if pending_parents:
+                code_map = {
+                    p.code: p
+                    for p in (await db.execute(select(Permission))).scalars().all()
+                }
+                for perm, parent_code in pending_parents:
+                    parent = code_map.get(parent_code)
+                    if parent:
+                        perm.parent_id = parent.id
+                await db.flush()
             admin_role = await _get_role_by_code(db, "admin")
             if admin_role:
                 perms = (await db.execute(select(Permission))).scalars().all()

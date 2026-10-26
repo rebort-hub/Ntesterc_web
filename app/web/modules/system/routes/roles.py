@@ -28,11 +28,12 @@ async def role_list(
     db: AsyncSession = Depends(get_db),
 ):
     roles, total = await RoleService(db).list_roles(page, page_size, name, code)
-    ctx = admin_page_context(
+    ctx = await admin_page_context(
         request,
         current_user,
         active_nav="roles",
         title="角色管理",
+        db=db,
         roles=roles,
         total=total,
         page=page,
@@ -48,12 +49,14 @@ async def role_list(
 async def role_create_form(
     request: Request,
     current_user: User = Depends(require_web_user),
+    db: AsyncSession = Depends(get_db),
 ):
-    ctx = admin_page_context(
+    ctx = await admin_page_context(
         request,
         current_user,
         active_nav="roles",
         title="新建角色",
+        db=db,
         form_action=system_path("/roles/create"),
         role_obj=None,
         error=None,
@@ -93,11 +96,12 @@ async def role_edit_form(
     role_obj = await RoleService(db).get_role(role_id)
     if not role_obj:
         return RedirectResponse(f"{system_path('/roles')}?err=角色不存在", status_code=302)
-    ctx = admin_page_context(
+    ctx = await admin_page_context(
         request,
         current_user,
         active_nav="roles",
         title="编辑角色",
+        db=db,
         form_action=system_path(f"/roles/{role_id}/edit"),
         role_obj=role_obj,
         error=None,

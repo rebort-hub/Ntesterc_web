@@ -3,7 +3,6 @@ from configparser import ConfigParser
 from datetime import timedelta
 from typing import List, Tuple
 from urllib.parse import quote_plus
-
 from app.config.path_conf import BASE_DIR
 
 config = ConfigParser()

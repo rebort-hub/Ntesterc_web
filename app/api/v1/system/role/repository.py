@@ -1,8 +1,6 @@
 from typing import Optional, Sequence
-
 from sqlalchemy import func, or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
-
 from app.api.v1.system.role.model import Role
 
 

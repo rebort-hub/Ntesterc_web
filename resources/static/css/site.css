@@ -3,11 +3,36 @@
     --text: #1a1d21;
     --muted: #5c6570;
     --primary: #2563eb;
-    --nt-primary: #1677ff;
     --border: #e2e8f0;
     --radius: 8px;
     /* 优先中文字体，避免 Windows 下回退糊字 */
     --font: "PingFang SC", "Microsoft YaHei", "Segoe UI", system-ui, -apple-system, sans-serif;
+
+    /* 框架设计令牌（主题可覆盖） */
+    --nt-primary: #1677ff;
+    --nt-primary-rgb: 22, 119, 255;
+    --nt-bg: #f5f7fb;
+    --nt-surface: #ffffff;
+    --nt-sider-bg: #ffffff;
+    --nt-border: rgba(5, 5, 5, 0.06);
+    --nt-text: rgba(0, 0, 0, 0.88);
+    --nt-text-secondary: rgba(0, 0, 0, 0.45);
+    --nt-menu-hover: rgba(0, 0, 0, 0.04);
+    --nt-menu-active-bg: rgba(22, 119, 255, 0.1);
+    --nt-menu-active-color: #1677ff;
+    --nt-sider-width: 220px;
+    --nt-sider-collapsed-width: 64px;
+    --nt-topbar-height: 56px;
+    --nt-control-height: 32px;
+    --nt-input-bg: #ffffff;
+    --nt-input-border: #d9d9d9;
+    --nt-muted-bg: #f3f4f6;
+    --nt-success-bg: #dcfce7;
+    --nt-success-text: #166534;
+    --nt-success-border: #a7f3d0;
+    --nt-danger-bg: #fef2f2;
+    --nt-danger-text: #b91c1c;
+    --nt-danger-border: #fecaca;
 }
 
 * { box-sizing: border-box; }
@@ -80,9 +105,9 @@ body {
     height: var(--nt-control-height, 32px);
     padding: 0 15px;
     border-radius: 6px;
-    border: 1px solid var(--border);
-    background: #fff;
-    color: var(--text);
+    border: 1px solid var(--nt-input-border, var(--border));
+    background: var(--nt-input-bg, #fff);
+    color: var(--nt-text, var(--text));
     text-decoration: none;
     cursor: pointer;
     font-size: 14px;

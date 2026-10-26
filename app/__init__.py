@@ -33,5 +33,7 @@ Web（前后端不分离，Jinja 页面）:
   resources/static/modules/<module>/...
   resources/templates/components/ui.html  公共宏: nt_table / nt_pagination / nt_modal / nt_datetime
   resources/static/css/components.css + js/components.js
+  resources/static/css/theme.css + js/theme.js  主题令牌 / 暗色 / 设置抽屉
+  resources/templates/errors/             403/404/405/500
   - 系统管理: /admin/system/users | roles | permissions
 """

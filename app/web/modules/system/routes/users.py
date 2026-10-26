@@ -33,11 +33,12 @@ async def user_list(
         username=username or None,
         email=email or None,
     )
-    ctx = admin_page_context(
+    ctx = await admin_page_context(
         request,
         current_user,
         active_nav="users",
         title="用户管理",
+        db=db,
         users=users,
         total=total,
         page=page,
@@ -53,12 +54,14 @@ async def user_list(
 async def user_create_form(
     request: Request,
     current_user: User = Depends(require_web_user),
+    db: AsyncSession = Depends(get_db),
 ):
-    ctx = admin_page_context(
+    ctx = await admin_page_context(
         request,
         current_user,
         active_nav="users",
         title="新建用户",
+        db=db,
         form_action=system_path("/users/create"),
         user_obj=None,
         error=None,
@@ -101,11 +104,12 @@ async def user_edit_form(
         user_obj = await UserService(db).get_user(user_id)
     except ValueError:
         return RedirectResponse(f"{system_path('/users')}?err=用户不存在", status_code=302)
-    ctx = admin_page_context(
+    ctx = await admin_page_context(
         request,
         current_user,
         active_nav="users",
         title="编辑用户",
+        db=db,
         form_action=system_path(f"/users/{user_id}/edit"),
         user_obj=user_obj,
         error=None,

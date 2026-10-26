@@ -49,6 +49,9 @@ class SystemInit:
         init_middleware(self.app)
         if WEB_ENABLED:
             self._init_static()
+            from app.web.errors import register_error_handlers
+
+            register_error_handlers(self.app)
         self.app.include_router(main_router)
         return self.app
 

@@ -1,0 +1,11 @@
+{% extends "errors/base_error.html" %}
+
+{% block title %}500{% endblock %}
+
+{% block error_illust %}
+<img class="nt-error__illust" src="{{ url_for('static', path='images/errors/500.svg') }}" alt="">
+{% endblock %}
+
+{% block error_code %}500{% endblock %}
+
+{% block error_message %}抱歉，服务器出错了{% endblock %}

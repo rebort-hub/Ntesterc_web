@@ -1,7 +1,5 @@
 from typing import Optional, Sequence
-
 from sqlalchemy.ext.asyncio import AsyncSession
-
 from app.api.v1.system.permission.model import PERMISSION_TYPES, Permission
 from app.api.v1.system.permission.repository import PermissionRepository
 from app.api.v1.system.permission.schemas import (
@@ -64,6 +62,11 @@ class PermissionService:
         await self.db.refresh(permission)
         return permission
 
+    async def set_enabled(self, permission_id: int, enabled: bool) -> Permission:
+        return await self.update_permission(
+            permission_id, PermissionUpdate(is_enabled=bool(enabled))
+        )
+
     async def delete_permission(self, permission_id: int) -> None:
         permission = await self.repo.get_by_id(permission_id)
         if not permission:
@@ -100,6 +103,9 @@ class PermissionService:
                 description=p.description,
                 type=p.type,
                 path=p.path,
+                icon=getattr(p, "icon", None),
+                open_type=getattr(p, "open_type", None),
+                is_enabled=bool(getattr(p, "is_enabled", True)),
                 parent_id=p.parent_id,
                 sort_order=p.sort_order,
                 children=[],
